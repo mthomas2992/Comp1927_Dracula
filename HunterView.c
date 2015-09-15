@@ -50,7 +50,7 @@ PlayerID whoAmI(HunterView currentView)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     int currPlayer = 0;
-    currPlayer = currentView->turns % NUM_PLAYERS;
+    currPlayer = (currentView->turns % NUM_PLAYERS) - 1; //player id starts at 0
     return currPlayer;
 }
 
