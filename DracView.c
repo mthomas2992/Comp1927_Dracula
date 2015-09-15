@@ -63,7 +63,11 @@ int howHealthyIs(DracView currentView, PlayerID player)
 LocationID whereIs(DracView currentView, PlayerID player)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+    if (player < turns) {
+       return UNKNOWN_LOCATION;
+    } else {
     return currentView->ID[player];
+    }
 }
 
 // Get the most recent move of a given player
