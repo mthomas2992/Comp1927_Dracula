@@ -49,9 +49,7 @@ Round giveMeTheRound(DracView currentView)
 int giveMeTheScore(DracView currentView)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    int currPlayer = 0;
-    currPlayer = currentView->turns % NUM_PLAYERS;
-    return currPlayer;
+    return currentView->score;
 }
 
 // Get the current health points for a given player
