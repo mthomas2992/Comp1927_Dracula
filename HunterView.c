@@ -72,7 +72,12 @@ int howHealthyIs(HunterView currentView, PlayerID player)
 LocationID whereIs(HunterView currentView, PlayerID player)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+    //assuming turns counted from 1 not 0
+    if (player < turns) {
+       return UNKNOWN_LOCATION;
+    } else {
     return currentView->ID[player];
+    }
 }
 
 //// Functions that return information about the history of the game
