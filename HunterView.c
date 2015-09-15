@@ -7,23 +7,27 @@
 #include "GameView.h"
 #include "HunterView.h"
 // #include "Map.h" ... if you decide to use the Map ADT
-     
+
 struct hunterView {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    int hello;
+    LocationID CurrentLocation; //for second last function
+    Map map;
 };
-     
+
 
 // Creates a new HunterView to summarise the current state of the game
 HunterView newHunterView(char *pastPlays, PlayerMessage messages[])
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     HunterView hunterView = malloc(sizeof(struct hunterView));
-    hunterView->hello = 42;
+    hunterView->CurrentLocation=LONDON; //need to fix this as it just assumes started
+    hunterView->map=newMap();
+    addConnections(hunterView->map); //add all connections to map
+
     return hunterView;
 }
-     
-     
+
+
 // Frees all memory previously allocated for the HunterView toBeDeleted
 void disposeHunterView(HunterView toBeDeleted)
 {
@@ -83,7 +87,7 @@ void giveMeTheTrail(HunterView currentView, PlayerID player,
 // What are my possible next moves (locations)
 LocationID *whereCanIgo(HunterView currentView, int *numLocations, int road, int sea)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+    //completed in dracview, will copy over when tested properly
     return NULL;
 }
 
