@@ -12,6 +12,11 @@ struct hunterView {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     LocationID CurrentLocation; //for second last function
     Map map;
+    int hello;
+    int turns;
+    int score;
+    int HP[NUM_PLAYERS];
+    int ID[NUM_PLAYERS];
 };
 
 
@@ -42,35 +47,42 @@ void disposeHunterView(HunterView toBeDeleted)
 Round giveMeTheRound(HunterView currentView)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return (currentView->turns);
 }
 
 // Get the id of current player
 PlayerID whoAmI(HunterView currentView)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    int currPlayer = 0;
+    currPlayer = (currentView->turns % NUM_PLAYERS) - 1; //player id starts at 0
+    return currPlayer;
 }
 
 // Get the current score
 int giveMeTheScore(HunterView currentView)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return currentView->score;
 }
 
 // Get the current health points for a given player
 int howHealthyIs(HunterView currentView, PlayerID player)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return currentView->HP[player];
 }
 
 // Get the current location id of a given player
 LocationID whereIs(HunterView currentView, PlayerID player)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    //assuming turns counted from 1 not 0
+    if (player < turns) {
+       return UNKNOWN_LOCATION;
+    } else {
+    return currentView->ID[player];
+    }
 }
 
 //// Functions that return information about the history of the game

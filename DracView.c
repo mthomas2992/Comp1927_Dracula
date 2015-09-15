@@ -12,6 +12,11 @@ struct dracView {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     LocationID CurrentLocation; //for second last function
     Map map;
+    int hello;
+    int turns;
+    int score;
+    int HP[NUM_PLAYERS];
+    int ID[NUM_PLAYERS];
 };
 
 
@@ -42,28 +47,32 @@ void disposeDracView(DracView toBeDeleted)
 Round giveMeTheRound(DracView currentView)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return currentView->turns;
 }
 
 // Get the current score
 int giveMeTheScore(DracView currentView)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return currentView->score;
 }
 
 // Get the current health points for a given player
 int howHealthyIs(DracView currentView, PlayerID player)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return currentView->HP[player];
 }
 
 // Get the current location id of a given player
 LocationID whereIs(DracView currentView, PlayerID player)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    if (player < turns) {
+       return UNKNOWN_LOCATION;
+    } else {
+    return currentView->ID[player];
+    }
 }
 
 // Get the most recent move of a given player
