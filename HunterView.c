@@ -12,7 +12,6 @@ struct hunterView {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     LocationID CurrentLocation; //for second last function
     Map map;
-    int hello;
     int turns;
     int score;
     int HP[NUM_PLAYERS];
