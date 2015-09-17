@@ -1,15 +1,28 @@
 // GameView.c ... GameView ADT implementation
-
+#include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
 #include "Globals.h"
 #include "Game.h"
 #include "GameView.h"
+#include "Players.h"
+#include "Map.h"
+
 // #include "Map.h" ... if you decide to use the Map ADT
-     
 struct gameView {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     int hello;
+    Round RoundNum;
+    PlayerID CurrentPlayer;
+    Map europe;
+
+    Player Lord_Godalming;
+    Player Dr_Seward;
+    Player Van_Helsing;
+    Player Mina_Harker;
+    Player Dracula;
+
+    int GameScore;    
 };
      
 
@@ -18,7 +31,44 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     GameView gameView = malloc(sizeof(struct gameView));
+    // INITIALIZE ALL THE THINGS IN THE GAMEVIEW STRUCT
+    // WILL FINISH THIS LAST
+    gameView->RoundNum = 0;
+    gameView->CurrentPlayer = 0;
+    gameView->GameScore = GAME_START_SCORE;
     gameView->hello = 42;
+    gameView->europe = newMap();
+
+    gameView->Lord_Godalming = initPlayer(PLAYER_LORD_GODALMING);
+    gameView->Dr_Seward	     = initPlayer(PLAYER_DR_SEWARD);
+    gameView->Van_Helsing    = initPlayer(PLAYER_VAN_HELSING);
+    gameView->Mina_Harker    = initPlayer(PLAYER_MINA_HARKER);
+    gameView->Dracula	     = initPlayer(PLAYER_DRACULA);
+
+    int i;
+    int scoreChange=0;
+    for (i=0; pastPlays[i] != '\0' ; i+=7) {
+	if (pastPlays[i] == ' ') i++;
+	if (pastPlays[i] == 'G') scoreChange = doPlayerTurn(gameView->Lord_Godalming, pastPlays+i);
+	else if (pastPlays[i] == 'S') scoreChange = doPlayerTurn(gameView->Dr_Seward, pastPlays+i);
+	else if (pastPlays[i] == 'H') scoreChange = doPlayerTurn(gameView->Van_Helsing, pastPlays+i);
+	else if (pastPlays[i] == 'M') scoreChange = doPlayerTurn(gameView->Mina_Harker, pastPlays+i);
+	else if (pastPlays[i] == 'D') scoreChange = doPlayerTurn(gameView->Dracula, pastPlays+i);
+	gameView->CurrentPlayer++;
+	if (gameView->CurrentPlayer==5) {
+	    gameView->CurrentPlayer = 0;
+            gameView->RoundNum++;
+        }
+        if (scoreChange == -6 || scoreChange == -1) {
+            gameView->GameScore += scoreChange;
+        }
+        else if (scoreChange == 10) deductHealth(gameView->Dracula, 10);
+        else if (scoreChange == 4) {
+            deductHealth(gameView->Dracula, 10);
+            gameView->GameScore -= 6;
+        }
+    }    
+
     return gameView;
 }
      
@@ -27,6 +77,12 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
 void disposeGameView(GameView toBeDeleted)
 {
     //COMPLETE THIS IMPLEMENTATION
+    // this should be pretty small, reasonably simple
+    removePlayer( toBeDeleted->Lord_Godalming );
+    removePlayer( toBeDeleted->Dr_Seward );
+    removePlayer( toBeDeleted->Van_Helsing );
+    removePlayer( toBeDeleted->Mina_Harker );
+    removePlayer( toBeDeleted->Dracula );
     free( toBeDeleted );
 }
 
@@ -36,36 +92,46 @@ void disposeGameView(GameView toBeDeleted)
 // Get the current round
 Round getRound(GameView currentView)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return currentView->RoundNum;
 }
 
 // Get the id of current player - ie whose turn is it?
 PlayerID getCurrentPlayer(GameView currentView)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return currentView->CurrentPlayer;
 }
 
 // Get the current score
 int getScore(GameView currentView)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return currentView->GameScore;
 }
 
 // Get the current health points for a given player
 int getHealth(GameView currentView, PlayerID player)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    switch(player) {
+	case PLAYER_LORD_GODALMING: return getPlayerHealth(currentView->Lord_Godalming);
+	case PLAYER_DR_SEWARD: 	    return getPlayerHealth(currentView->Dr_Seward);
+	case PLAYER_VAN_HELSING:    return getPlayerHealth(currentView->Van_Helsing);
+	case PLAYER_MINA_HARKER:    return getPlayerHealth(currentView->Mina_Harker);
+	case PLAYER_DRACULA: 	    return getPlayerHealth(currentView->Dracula);
+	default: 		    return 0;
+    }
 }
 
 // Get the current location id of a given player
 LocationID getLocation(GameView currentView, PlayerID player)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+
+    switch(player) {
+	case 0: return getPlayerLocation(currentView->Lord_Godalming);
+	case 1: return getPlayerLocation(currentView->Dr_Seward);
+	case 2: return getPlayerLocation(currentView->Van_Helsing);
+	case 3: return getPlayerLocation(currentView->Mina_Harker);
+	case 4: return getPlayerLocation(currentView->Dracula);
+	default: return 0;
+    }
 }
 
 //// Functions that return information about the history of the game
@@ -74,7 +140,16 @@ LocationID getLocation(GameView currentView, PlayerID player)
 void getHistory(GameView currentView, PlayerID player,
                             LocationID trail[TRAIL_SIZE])
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+    int i;
+    for (i=0; i<=TRAIL_SIZE; i++){
+        if (player == 0) trail[i] = getPlayerHistory(currentView->Lord_Godalming, i);
+	else if (player == 1) trail[i] = getPlayerHistory(currentView->Dr_Seward, i);
+	else if (player == 2) trail[i] = getPlayerHistory(currentView->Van_Helsing, i);
+        else if (player == 3) trail[i] = getPlayerHistory(currentView->Mina_Harker, i);
+	else if (player == 4) trail[i] = getPlayerHistory(currentView->Dracula, i);
+    }
+    // may need to add some robustness here
+
 }
 
 //// Functions that query the map to find information about connectivity
@@ -86,5 +161,12 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
                                int road, int rail, int sea)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+    // This should be easy enough to do with the week 7 code
+//    int i;
+ //   int *IDs;
+
+    //for(i=0; i<= 71l i++) {
+     //   if (connections, 
+
     return NULL;
 }

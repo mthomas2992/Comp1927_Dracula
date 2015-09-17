@@ -103,6 +103,10 @@ typedef int LocationID;
 #define MAX_MAP_LOCATION        70
 #define NUM_MAP_LOCATIONS       71
 
+#define MIN_DRAC_MAP_LOCATION   100
+#define MAX_DRAC_MAP_LOCATION   108
+#define NUM_DRAC_MAP_LOCATIONS  9
+
 // Other "locations"
 #define CITY_UNKNOWN            100
 #define SEA_UNKNOWN             101
@@ -132,6 +136,6 @@ int abbrevToID(char *abbrev);
 #define isLand(place)  (idToType(place) == LAND)
 #define isSea(place)  (idToType(place) == SEA)
 
-#define validPlace(pid) (pid >= MIN_MAP_LOCATION && pid <= MAX_MAP_LOCATION)
-
+//#define validPlace(pid) (pid >= MIN_MAP_LOCATION && pid <= MAX_MAP_LOCATION)
+#define validPlace(pid) (pid >= MIN_MAP_LOCATION && pid <= MAX_DRAC_MAP_LOCATION)
 #endif

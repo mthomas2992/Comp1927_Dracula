@@ -89,12 +89,24 @@ static Place places[] =
    {"Vienna", "VI", VIENNA, LAND},
    {"Zagreb", "ZA", ZAGREB, LAND},
    {"Zurich", "ZU", ZURICH, LAND},
+
+   // Dracula places
+   {"Unknown City", "C?", CITY_UNKNOWN, LAND},
+   {"Unknown Sea", "S?", SEA_UNKNOWN, SEA},
+   {"Hide", "HI", HIDE, LAND},
+   {"Double Back 1", "D1", DOUBLE_BACK_1, UNKNOWN},
+   {"Double Back 2", "D2", DOUBLE_BACK_2, UNKNOWN},
+   {"Double Back 3", "D3", DOUBLE_BACK_3, UNKNOWN},
+   {"Double Back 4", "D4", DOUBLE_BACK_4, UNKNOWN},
+   {"Double Back 5", "D5", DOUBLE_BACK_5, UNKNOWN},
+   {"Teleport", "TP", TELEPORT, LAND},
 };
 
 // given a Place number, return its name
 char *idToName(LocationID p)
 {
    assert(validPlace(p));
+   if (p>MAX_MAP_LOCATION) p-=29;
    return places[p].name;
 }
 
@@ -102,6 +114,7 @@ char *idToName(LocationID p)
 int idToType(LocationID p)
 {
    assert(validPlace(p));
+   if (p>MAX_MAP_LOCATION) p-=29;
    return places[p].type;
 }
 
@@ -131,6 +144,12 @@ int abbrevToID(char *abbrev)
    Place *first = &places[MIN_MAP_LOCATION];
    Place *last = &places[MAX_MAP_LOCATION];
    for (p = first; p <= last; p++) {
+      char *c = p->abbrev;
+      if (c[0] == abbrev[0] && c[1] == abbrev[1] && c[2] == '\0') return p->id;
+   }
+   first = &places[71];
+   last = &places[79];
+   for (p=first; p<=last; p++) {
       char *c = p->abbrev;
       if (c[0] == abbrev[0] && c[1] == abbrev[1] && c[2] == '\0') return p->id;
    }

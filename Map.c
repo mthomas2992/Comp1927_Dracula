@@ -134,6 +134,37 @@ int numE(Map g, TransportID type)
     return nE;
 }
 
+// Returns the number of direct connections between two nodes
+// Also fills in the type[] array with the various connection types
+// Returns 0 if no direct connection (i.e. not adjacent in graph)
+int connections(Map g, LocationID start, LocationID end, TransportID type[])
+{
+   assert(g != NULL);
+   assert(start >= 0 && start <=70);
+   assert(end >= 0 && end <=70);
+   int n=0;
+
+   VList  curr;
+   VList  boatcurr;
+
+   if (start == end) return 0;
+
+   for (curr = g->connections[start]; curr!=NULL; curr=curr->next) {
+            if (curr->v == end) {
+                      type[n++] = curr->type;
+            }
+      if (curr->type==BOAT && idToType(start) != SEA && idToType(end)!=SEA ){
+        for (boatcurr = g->connections[curr->v]; boatcurr!=NULL; boatcurr=boatcurr->next) {
+           if (boatcurr->v == end) {
+               type[n++] = curr->type;
+           }
+              }
+      }
+  }
+   return n;
+}
+
+
 // Add edges to Graph representing map of Europe
 static void addConnections(Map g)
 {
