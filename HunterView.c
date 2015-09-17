@@ -7,23 +7,31 @@
 #include "GameView.h"
 #include "HunterView.h"
 // #include "Map.h" ... if you decide to use the Map ADT
-     
+
 struct hunterView {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    int hello;
+    LocationID CurrentLocation; //for second last function
+    Map map;
+    int turns;
+    int score;
+    int HP[NUM_PLAYERS];
+    int ID[NUM_PLAYERS];
 };
-     
+
 
 // Creates a new HunterView to summarise the current state of the game
 HunterView newHunterView(char *pastPlays, PlayerMessage messages[])
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     HunterView hunterView = malloc(sizeof(struct hunterView));
-    hunterView->hello = 42;
+    hunterView->CurrentLocation=LONDON; //need to fix this as it just assumes started
+    hunterView->map=newMap();
+    addConnections(hunterView->map); //add all connections to map
+
     return hunterView;
 }
-     
-     
+
+
 // Frees all memory previously allocated for the HunterView toBeDeleted
 void disposeHunterView(HunterView toBeDeleted)
 {
@@ -38,35 +46,42 @@ void disposeHunterView(HunterView toBeDeleted)
 Round giveMeTheRound(HunterView currentView)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return (currentView->turns);
 }
 
 // Get the id of current player
 PlayerID whoAmI(HunterView currentView)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    int currPlayer = 0;
+    currPlayer = (currentView->turns % NUM_PLAYERS) - 1; //player id starts at 0
+    return currPlayer;
 }
 
 // Get the current score
 int giveMeTheScore(HunterView currentView)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return currentView->score;
 }
 
 // Get the current health points for a given player
 int howHealthyIs(HunterView currentView, PlayerID player)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return currentView->HP[player];
 }
 
 // Get the current location id of a given player
 LocationID whereIs(HunterView currentView, PlayerID player)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    //assuming turns counted from 1 not 0
+    if (player < turns) {
+       return UNKNOWN_LOCATION;
+    } else {
+    return currentView->ID[player];
+    }
 }
 
 //// Functions that return information about the history of the game
@@ -83,7 +98,7 @@ void giveMeTheTrail(HunterView currentView, PlayerID player,
 // What are my possible next moves (locations)
 LocationID *whereCanIgo(HunterView currentView, int *numLocations, int road, int sea)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+    //completed in dracview, will copy over when tested properly
     return NULL;
 }
 

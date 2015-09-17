@@ -7,23 +7,31 @@
 #include "GameView.h"
 #include "DracView.h"
 // #include "Map.h" ... if you decide to use the Map ADT
-     
+
 struct dracView {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    int hello;
+    LocationID CurrentLocation; //for second last function
+    Map map;
+    int turns;
+    int score;
+    int HP[NUM_PLAYERS];
+    int ID[NUM_PLAYERS];
 };
-     
+
 
 // Creates a new DracView to summarise the current state of the game
 DracView newDracView(char *pastPlays, PlayerMessage messages[])
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     DracView dracView = malloc(sizeof(struct dracView));
-    dracView->hello = 42;
+    dracView->CurrentLocation=CASTLE_DRACULA; //need to fix this as it just assumes started
+    dracView->map=newMap();
+    addConnections(dracView->map); //add all connections to map
+
     return dracView;
 }
-     
-     
+
+
 // Frees all memory previously allocated for the DracView toBeDeleted
 void disposeDracView(DracView toBeDeleted)
 {
@@ -38,28 +46,32 @@ void disposeDracView(DracView toBeDeleted)
 Round giveMeTheRound(DracView currentView)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return currentView->turns;
 }
 
 // Get the current score
 int giveMeTheScore(DracView currentView)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return currentView->score;
 }
 
 // Get the current health points for a given player
 int howHealthyIs(DracView currentView, PlayerID player)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    return currentView->HP[player];
 }
 
 // Get the current location id of a given player
 LocationID whereIs(DracView currentView, PlayerID player)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return 0;
+    if (player < turns) {
+       return UNKNOWN_LOCATION;
+    } else {
+    return currentView->ID[player];
+    }
 }
 
 // Get the most recent move of a given player
@@ -92,8 +104,23 @@ void giveMeTheTrail(DracView currentView, PlayerID player,
 // What are my (Dracula's) possible next moves (locations)
 LocationID *whereCanIgo(DracView currentView, int *numLocations, int road, int sea)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return NULL;
+    //untested, will copy over to hunter when tested
+    int i=0;
+    VList curr=currentView->map->connections[dracView->CurrentLocation];
+    while(curr!=NULL){
+      if (road==1){
+        if (curr->type==ROAD){
+          numLocations[i++]=curr->v;
+        }
+      }
+      if (sea==1){
+        if (curr->type==SEA){
+          numLocations[i++]=curr->v;
+        }
+      }
+      curr=curr->next;
+    }
+    return numLocations; //not sure if returning the right stuff
 }
 
 // What are the specified player's next possible moves
