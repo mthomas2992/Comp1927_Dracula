@@ -6,7 +6,7 @@
 #include "Game.h"
 #include "GameView.h"
 #include "DracView.h"
-// #include "Map.h" ... if you decide to use the Map ADT
+#include "Map.h"
 
 struct dracView {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
@@ -16,6 +16,20 @@ struct dracView {
     int score;
     int HP[NUM_PLAYERS];
     int ID[NUM_PLAYERS];
+};
+//currently the map structs are double defined..
+typedef struct vNode *VList;
+
+struct vNode {
+   LocationID  v;    // ALICANTE, etc
+   TransportID type; // ROAD, RAIL, BOAT
+   VList       next; // link to next node
+};
+
+struct MapRep {
+   int   nV;         // #vertices
+   int   nE;         // #edges
+   VList connections[NUM_MAP_LOCATIONS]; // array of lists
 };
 
 
@@ -66,11 +80,13 @@ int howHealthyIs(DracView currentView, PlayerID player)
 LocationID whereIs(DracView currentView, PlayerID player)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+    /*
     if (player < turns) {
        return UNKNOWN_LOCATION;
     } else {
     return currentView->ID[player];
-    }
+    }*/
+    return 0;
 }
 
 // Get the most recent move of a given player
@@ -105,7 +121,7 @@ LocationID *whereCanIgo(DracView currentView, int *numLocations, int road, int s
 {
     //untested, will copy over to hunter when tested
     int i=0;
-    VList curr=currentView->map->connections[dracView->CurrentLocation];
+    VList curr=currentView->map->connections[currentView->CurrentLocation];
     while(curr!=NULL){
       if (road==1){
         if (curr->type==ROAD){

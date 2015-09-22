@@ -6,7 +6,7 @@
 #include "Game.h"
 #include "GameView.h"
 #include "HunterView.h"
-// #include "Map.h" ... if you decide to use the Map ADT
+#include "Map.h"
 
 struct hunterView {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
@@ -76,11 +76,12 @@ LocationID whereIs(HunterView currentView, PlayerID player)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     //assuming turns counted from 1 not 0
-    if (player < turns) {
+    /*if (player < turns) {
        return UNKNOWN_LOCATION;
     } else {
     return currentView->ID[player];
-    }
+  }*/
+  return 0;
 }
 
 //// Functions that return information about the history of the game
