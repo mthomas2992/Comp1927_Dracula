@@ -86,7 +86,9 @@ void disposeGameView(GameView toBeDeleted)
     removePlayer( toBeDeleted->Van_Helsing );
     removePlayer( toBeDeleted->Mina_Harker );
     removePlayer( toBeDeleted->Dracula );
+    disposeMap( toBeDeleted->europe );
     free( toBeDeleted );
+
 }
 
 
@@ -165,11 +167,20 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     // This should be easy enough to do with the week 7 code
-//    int i;
- //   int *IDs;
+    int i,n=0;    
+    int *locations = malloc(71*sizeof(int));
+    locations[n++] = from;
 
-    //for(i=0; i<= 71l i++) {
-     //   if (connections, 
-
-    return NULL;
+    for (i=0; i<=70; i++) {
+        if (road && connections(currentView->europe, from, i, ROAD)) {
+            locations[n++] = i;
+        } else if (sea && connections(currentView->europe, from, i, BOAT)) {
+            locations[n++] = i;
+        } else if (rail && player!= 4 && connections(currentView->europe, from, i, RAIL)) {
+            locations[n++] = i;
+        }
+    }
+    *numLocations = n;
+   
+    return locations;
 }

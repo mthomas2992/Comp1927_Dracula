@@ -109,6 +109,19 @@ int main()
     free(edges);
     printf("passed\n");
     disposeGameView(gv);
+
+    printf("Beginning custom test cases\n");
+    gv = newGameView("", messages1);
+    printf("Checking Paris rail connections\n");
+    edges = connectedLocations(gv, &size, PARIS, PLAYER_LORD_GODALMING, 0,0,1,0);
+    memset(seen, 0, NUM_MAP_LOCATIONS*sizeof(int));
+    for (i=0; i < size; i++) seen[edges[i]] = 1;
+    assert(size = 5); assert(seen[BORDEAUX]); assert(seen[MARSEILLES]);
+    assert(seen[LE_HAVRE]); assert(seen[BRUSSELS]); assert(seen[PARIS]);
+    free(edges);
+    printf("passed\n");
+    disposeGameView(gv);
+
     return 0;
 }
 

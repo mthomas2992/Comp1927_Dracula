@@ -20,5 +20,6 @@ void disposeMap(Map g);
 void showMap(Map g); 
 int  numV(Map g);
 int  numE(Map g, TransportID t);
+int connections(Map g, LocationID start, LocationID end, int type);
 
 #endif
