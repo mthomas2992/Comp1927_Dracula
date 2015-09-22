@@ -19,20 +19,6 @@ struct dracView {
 
     GameView gameView;
 };
-//currently the map structs are double defined..
-typedef struct vNode *VList;
-
-struct vNode {
-   LocationID  v;    // ALICANTE, etc
-   TransportID type; // ROAD, RAIL, BOAT
-   VList       next; // link to next node
-};
-
-struct MapRep {
-   int   nV;         // #vertices
-   int   nE;         // #edges
-   VList connections[NUM_MAP_LOCATIONS]; // array of lists
-};
 
 
 // Creates a new DracView to summarise the current state of the game
