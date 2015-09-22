@@ -178,6 +178,7 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
             locations[n++] = i;
         } else if (rail && player!= 4 && connections(currentView->europe, from, i, RAIL)) {
             locations[n++] = i;
+            // remember to update this for rail!!!
         }
     }
     *numLocations = n;

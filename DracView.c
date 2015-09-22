@@ -16,6 +16,8 @@ struct dracView {
     int score;
     int HP[NUM_PLAYERS];
     int ID[NUM_PLAYERS];
+
+    GameView gameView;
 };
 //currently the map structs are double defined..
 typedef struct vNode *VList;
@@ -41,6 +43,8 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
     dracView->CurrentLocation=CASTLE_DRACULA; //need to fix this as it just assumes started
     dracView->map=newMap();
 
+    dracView->gameView = newGameView(pastPlays, messages);
+
     return dracView;
 }
 
@@ -49,6 +53,7 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
 void disposeDracView(DracView toBeDeleted)
 {
     //COMPLETE THIS IMPLEMENTATION
+    disposeGameView( toBeDeleted->gameView );
     free(toBeDeleted);
 }
 
@@ -59,21 +64,26 @@ void disposeDracView(DracView toBeDeleted)
 Round giveMeTheRound(DracView currentView)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return currentView->turns;
+
+    return getRound( currentView->gameView );
 }
 
 // Get the current score
 int giveMeTheScore(DracView currentView)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return currentView->score;
+    //return currentView->score;
+
+    return getScore( currentView->gameView);
 }
 
 // Get the current health points for a given player
 int howHealthyIs(DracView currentView, PlayerID player)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return currentView->HP[player];
+    //return currentView->HP[player];
+
+    return getHealth( currentView->gameView, player);
 }
 
 // Get the current location id of a given player
@@ -86,7 +96,7 @@ LocationID whereIs(DracView currentView, PlayerID player)
     } else {
     return currentView->ID[player];
     }*/
-    return 0;
+    return getLocation( currentView->gameView, player);
 }
 
 // Get the most recent move of a given player
@@ -112,6 +122,7 @@ void giveMeTheTrail(DracView currentView, PlayerID player,
                             LocationID trail[TRAIL_SIZE])
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+    
 }
 
 //// Functions that query the map to find information about connectivity
@@ -120,22 +131,9 @@ void giveMeTheTrail(DracView currentView, PlayerID player,
 LocationID *whereCanIgo(DracView currentView, int *numLocations, int road, int sea)
 {
     //untested, will copy over to hunter when tested
-    int i=0;
-    VList curr=currentView->map->connections[currentView->CurrentLocation];
-    while(curr!=NULL){
-      if (road==1){
-        if (curr->type==ROAD){
-          numLocations[i++]=curr->v;
-        }
-      }
-      if (sea==1){
-        if (curr->type==SEA){
-          numLocations[i++]=curr->v;
-        }
-      }
-      curr=curr->next;
-    }
-    return numLocations; //not sure if returning the right stuff
+    return connectedLocations(currentView->gameView, numLocations, 
+			      whereIs(currentView, 4), 4, giveMeTheRound(currentView), road, 0, sea);
+
 }
 
 // What are the specified player's next possible moves
@@ -143,5 +141,8 @@ LocationID *whereCanTheyGo(DracView currentView, int *numLocations,
                            PlayerID player, int road, int rail, int sea)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+    
+    return connectedLocations(currentView->gameView, numLocations, 
+			      whereIs(currentView, player), player, giveMeTheRound(currentView), road, rail, sea);
     return NULL;
 }
