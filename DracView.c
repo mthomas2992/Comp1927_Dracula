@@ -26,7 +26,6 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
     DracView dracView = malloc(sizeof(struct dracView));
     dracView->CurrentLocation=CASTLE_DRACULA; //need to fix this as it just assumes started
     dracView->map=newMap();
-    addConnections(dracView->map); //add all connections to map
 
     return dracView;
 }
@@ -36,7 +35,7 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
 void disposeDracView(DracView toBeDeleted)
 {
     //COMPLETE THIS IMPLEMENTATION
-    free( toBeDeleted );
+    free(toBeDeleted);
 }
 
 

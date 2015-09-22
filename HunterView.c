@@ -26,7 +26,6 @@ HunterView newHunterView(char *pastPlays, PlayerMessage messages[])
     HunterView hunterView = malloc(sizeof(struct hunterView));
     hunterView->CurrentLocation=LONDON; //need to fix this as it just assumes started
     hunterView->map=newMap();
-    addConnections(hunterView->map); //add all connections to map
 
     return hunterView;
 }
