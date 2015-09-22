@@ -23,6 +23,8 @@ struct gameView {
     Player Mina_Harker;
     Player Dracula;
 
+    // Location ID TrapLocs[];
+    // Location ID currentVampireLoc;
     int GameScore;    
 };
 

@@ -10,14 +10,8 @@
 
 struct dracView {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    LocationID CurrentLocation; //for second last function
-    Map map;
-    int turns;
-    int score;
-    int HP[NUM_PLAYERS];
-    int ID[NUM_PLAYERS];
-
     GameView gameView;
+    
 };
 
 
@@ -26,8 +20,6 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     DracView dracView = malloc(sizeof(struct dracView));
-    dracView->CurrentLocation=CASTLE_DRACULA; //need to fix this as it just assumes started
-    dracView->map=newMap();
 
     dracView->gameView = newGameView(pastPlays, messages);
 
@@ -90,6 +82,10 @@ void lastMove(DracView currentView, PlayerID player,
                  LocationID *start, LocationID *end)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
+    LocationID trail[6] ={};
+    getHistory(currentView->gameView, player, trail);
+    *start = trail[1];
+    *end = trail[0];
     return;
 }
 
@@ -109,6 +105,7 @@ void giveMeTheTrail(DracView currentView, PlayerID player,
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     
+    getHistory(currentView->gameView, player, trail);
 }
 
 //// Functions that query the map to find information about connectivity
