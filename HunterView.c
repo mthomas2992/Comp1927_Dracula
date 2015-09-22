@@ -6,17 +6,9 @@
 #include "Game.h"
 #include "GameView.h"
 #include "HunterView.h"
-#include "Map.h"
+//#include "Map.h"
 
 struct hunterView {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    LocationID CurrentLocation; //for second last function
-    Map map;
-    int turns;
-    int score;
-    int HP[NUM_PLAYERS];
-    int ID[NUM_PLAYERS];
-
     GameView gameView;
 };
 
@@ -100,8 +92,8 @@ void giveMeTheTrail(HunterView currentView, PlayerID player,
 LocationID *whereCanIgo(HunterView currentView, int *numLocations, int road, int rail, int sea)
 {
     //completed in dracview, will copy over when tested properly
-    return connectedLocations(currentView->gameView, numLocations, 
-                              whereIs(currentView, whoAmI(currentView)), whoAmI(currentView), 
+    return connectedLocations(currentView->gameView, numLocations,
+                              whereIs(currentView, whoAmI(currentView)), whoAmI(currentView),
                               getRound(currentView->gameView), road, rail, sea);
 }
 
@@ -110,7 +102,7 @@ LocationID *whereCanTheyGo(HunterView currentView, int *numLocations,
                            PlayerID player, int road, int rail, int sea)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    return connectedLocations(currentView->gameView, numLocations, 
-                              whereIs(currentView, player), player, 
+    return connectedLocations(currentView->gameView, numLocations,
+                              whereIs(currentView, player), player,
                               getRound(currentView->gameView), road, rail, sea);
 }
