@@ -60,18 +60,10 @@ int doPlayerTurn(Player p, char* detail)
             }
         }
     else if (p->player==4) {
-        if (detail[3] == 'T') {
-        
-        } //place trap
-        if (detail[4] == 'V') {
-        
-        } //place vampire
-        if (detail[5] == 'M'){
-        
-        } //trap failed
-        else if (detail[5] == 'V' || detail[6] == 'V') {
+        //vampire matured 
+        if (detail[5] == 'V' || detail[6] == 'V') {
             scoreResult -= 13;
-        }//vampire matured 
+        }
         scoreResult -= 1;  
         if (p->Location == DOUBLE_BACK_1) locationModifier = 1; 
         if (p->Location == DOUBLE_BACK_2) locationModifier = 2;

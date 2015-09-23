@@ -1,17 +1,18 @@
-// HunterView.h
-// Official Interface for HunterViewADT
+// DracView.h
+// Official Interface for DracViewADT
 // COMP1927 14s2
 
-#ifndef HUNTER_VIEW_H
-#define HUNTER_VIEW_H
+#ifndef DRAC_VIEW_H
+#define DRAC_VIEW_H
 
 #include "Globals.h"
 #include "Game.h"
 #include "Places.h"
+#include "GameView.h"
 
-typedef struct hunterView *HunterView;
+typedef struct dracView *DracView;
 
-// newHunterView() creates a new game view to summarise the current state of
+// newDracView() creates a new game view to summarise the current state of
 // the game.
 //
 // pastPlays is a string of all the plays made in the game so far by all
@@ -29,45 +30,58 @@ typedef struct hunterView *HunterView;
 // The "PlayerMessage" type is defined in Game.h.
 // You are free to ignore messages if you wish.
 
-HunterView newHunterView(char *pastPlays, PlayerMessage messages[]);
+DracView newDracView(char *pastPlays, PlayerMessage messages[]);
 
 
-// disposeHunterView() frees all memory previously allocated for the HunterView
+// disposeDracView() frees all memory previously allocated for the DracView
 // toBeDeleted. toBeDeleted should not be accessed after the call.
 
-void disposeHunterView(HunterView toBeDeleted);
+void disposeDracView(DracView toBeDeleted);
 
 
 // Functions to return simple information about the current state of the game
 
 // Get the current round
 
-Round giveMeTheRound(HunterView currentView);
-
-// Get the id of current player - ie whose turn is it?
-
-PlayerID whoAmI(HunterView currentView);
+Round giveMeTheRound(DracView currentView);
 
 // Get the current score
 // Returns a positive integer [0...366]
 
-int giveMeTheScore(HunterView currentView);
+int giveMeTheScore(DracView currentView);
 
 // Get the current health points for a given player
 // 'player' specifies which players's life/blood points to return
 //    and must be a value in the interval [0...4] (see 'player' type)
 
-int howHealthyIs(HunterView currentView, PlayerID player);
+int howHealthyIs(DracView currentView, PlayerID player);
 
 // Get the current location id of a given player
 // May be UNKNOWN_LOCATION if the player has not had a turn yet
 //   (ie at the beginning of the game when the round is 0)
-// If the PlayerID is Dracula, and the currentPlayer doesn't
-//   know Dracula's precise location, return the appropriate
-//   X_UNKNOWN (where X is CITY or SEA) if that much can be determined,
-//   else simply return UNKNOWN_LOCATION
+// Always returns an exact location
+//   (assumes that the pastPlays string contains full Dracula
+//    locations since Dracula always knows where he's been)
 
-LocationID whereIs(HunterView currentView, PlayerID player);
+LocationID whereIs(DracView currentView, PlayerID player);
+
+// Get the most recent move of a given player
+// Returns the start location and end location of that move
+// Since Dracula moves last, the end location for other players is always known,
+//   but the start location may be UNKNOWN_LOCATION (for a hunter's first move)
+// The start and end locations can be the same
+
+void lastMove(DracView currentView, PlayerID player,
+                 LocationID *start, LocationID *end);
+
+// Find out what minions I (Dracula) has placed at the specified location
+//   (minions are traps and immature vampires)
+// Places counts in the vars referenced by the 3rd and 4th parameters
+// If where is not a place where minions can be left (e.g. at sea,
+//   or NOWHERE), then set both counts to zero
+
+void whatsThere(DracView currentView, LocationID where,
+                         int *numTraps, int *numVamps);
 
 
 //// Functions that return information about the history of the game
@@ -80,10 +94,10 @@ LocationID whereIs(HunterView currentView, PlayerID player);
 //   {29, 12, -1, -1, -1, -1}
 // This would mean in the first move the player started on location 12
 //   then moved to the current location of 29
-// Hunters only get approximate information about where Dracula has been
-//   (e.g. SEA_UNKNOWN) unless Dracula is in Castle Dracula or has been encountered
+// If Dracula asks about his own trail, he should get precise information
+//   about where he has been (real locations, not double-back, etc)
 
-void giveMeTheTrail(HunterView currentView, PlayerID player,
+void giveMeTheTrail(DracView currentView, PlayerID player,
                         LocationID trail[TRAIL_SIZE]);
 
 
@@ -95,10 +109,12 @@ void giveMeTheTrail(HunterView currentView, PlayerID player,
 //   if the road and/or sea parameters are TRUE.
 // The size of the array is stored in the variable pointed to by numLocations
 // The array can be in any order but must contain unique entries
-// The current location should be included in the array (could rest)
+// Should not include the hospital nor any locations only reachable by rail
+// The current location should be included in the array
+// The set of possible locations must be consistent with the rules on Dracula's
+//   movement (e.g. can't MOVE to a location currently in his trail)
 
-LocationID *whereCanIgo(HunterView currentView, int *numLocations, 
-                        int road,int rail,int sea);
+LocationID *whereCanIgo(DracView currentView, int *numLocations, int road, int sea);
 
 // whereCanTheyGo() returns an array of LocationIDs giving all of the
 //   locations that the given Player could reach from their current location
@@ -106,12 +122,13 @@ LocationID *whereCanIgo(HunterView currentView, int *numLocations,
 //   if the road, rail, sea parameters are TRUE.
 // The size of the array is stored in the variable pointed to by numLocations
 // The array can be in any order but must contain unique entries
-// If the given player is Dracula, sets numLocations to 0, unless you
-//   know Dracula's location precisely
-// The player's current location should be included in the array (could rest)
+// The function must take into account the round for determining how far
+//   a player can travel by rail
+// If the given player is Dracula, this function calls whereCanIgo()
+//   to produce the answers
+// The player's current location should be included in the array
 
-LocationID *whereCanTheyGo(HunterView currentView, int *numLocations,
+LocationID *whereCanTheyGo(DracView currentView, int *numLocations,
                            PlayerID player, int road, int rail, int sea);
-
 
 #endif

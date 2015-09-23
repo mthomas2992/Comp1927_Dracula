@@ -7,14 +7,13 @@
 #include "GameView.h"
 #include "Players.h"
 #include "Map.h"
-#include "Places.h"
 
 // #include "Map.h" ... if you decide to use the Map ADT
 struct gameView {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     //
     LocationID vampLoc;
-    LocationID traps[3*NUM_MAP_LOCATIONS];
+    LocationID trapLocs[6];
     int trapNum;
     Round RoundNum;
     PlayerID CurrentPlayer;
@@ -43,6 +42,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     gameView->GameScore = GAME_START_SCORE;
     gameView->vampLoc = -1;
     gameView->trapNum = 0;
+    gameView->trapLocs[0] = -1;
     gameView->europe = newMap();
 
     gameView->Lord_Godalming = initPlayer(PLAYER_LORD_GODALMING);
@@ -53,25 +53,35 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
 
     int i;
     int scoreChange=0;
+
+    //// HANDLING PAST PLAYS STRING
+    //// We will probably do this a different way in the final thing,  (maybe)
+    //// but for now it has to be like this because we can't add functions in 
+    //// this ADT  ((  :(  ))
     for (i=0; pastPlays[i] != '\0' ; i+=7) {
 	if (pastPlays[i] == ' ') i++;
-	if (pastPlays[i] == 'G') scoreChange = doPlayerTurn(gameView->Lord_Godalming, pastPlays+i);
-	else if (pastPlays[i] == 'S') scoreChange = doPlayerTurn(gameView->Dr_Seward, pastPlays+i);
-	else if (pastPlays[i] == 'H') scoreChange = doPlayerTurn(gameView->Van_Helsing, pastPlays+i);
-	else if (pastPlays[i] == 'M') scoreChange = doPlayerTurn(gameView->Mina_Harker, pastPlays+i);
-	else if (pastPlays[i] == 'D') scoreChange = doPlayerTurn(gameView->Dracula, pastPlays+i);
+	if (pastPlays[i] == 'G') {
+            scoreChange = doPlayerTurn(gameView->Lord_Godalming, pastPlays+i);
+        } else if (pastPlays[i] == 'S') {
+            scoreChange = doPlayerTurn(gameView->Dr_Seward, pastPlays+i);
+        } else if (pastPlays[i] == 'H') {
+            scoreChange = doPlayerTurn(gameView->Van_Helsing, pastPlays+i);
+        } else if (pastPlays[i] == 'M') {
+            scoreChange = doPlayerTurn(gameView->Mina_Harker, pastPlays+i);
+        } else if (pastPlays[i] == 'D') {
+            scoreChange = doPlayerTurn(gameView->Dracula, pastPlays+i);
+        }
+        if (scoreChange <= 0) {
+            gameView->GameScore += scoreChange;
+        } else if (scoreChange == 10) deductHealth(gameView->Dracula, 10);
+        else if (scoreChange == 4) {
+            deductHealth(gameView->Dracula, 10);
+            gameView->GameScore -= 6;
+        }
 	gameView->CurrentPlayer++;
 	if (gameView->CurrentPlayer==5) {
 	    gameView->CurrentPlayer = 0;
             gameView->RoundNum++;
-        }
-        if (scoreChange <= 0) {
-            gameView->GameScore += scoreChange;
-        }
-        else if (scoreChange == 10) deductHealth(gameView->Dracula, 10);
-        else if (scoreChange == 4) {
-            deductHealth(gameView->Dracula, 10);
-            gameView->GameScore -= 6;
         }
     }    
 
