@@ -7,12 +7,15 @@
 #include "GameView.h"
 #include "Players.h"
 #include "Map.h"
+#include "Places.h"
 
 // #include "Map.h" ... if you decide to use the Map ADT
 struct gameView {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     //
-    int hello;
+    LocationID vampLoc;
+    LocationID traps[3*NUM_MAP_LOCATIONS];
+    int trapNum;
     Round RoundNum;
     PlayerID CurrentPlayer;
     Map europe;
@@ -23,8 +26,6 @@ struct gameView {
     Player Mina_Harker;
     Player Dracula;
 
-    // Location ID TrapLocs[];
-    // Location ID currentVampireLoc;
     int GameScore;    
 };
 
@@ -40,7 +41,8 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
     gameView->RoundNum = 0;
     gameView->CurrentPlayer = 0;
     gameView->GameScore = GAME_START_SCORE;
-    gameView->hello = 42;
+    gameView->vampLoc = -1;
+    gameView->trapNum = 0;
     gameView->europe = newMap();
 
     gameView->Lord_Godalming = initPlayer(PLAYER_LORD_GODALMING);
@@ -63,7 +65,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
 	    gameView->CurrentPlayer = 0;
             gameView->RoundNum++;
         }
-        if (scoreChange == -6 || scoreChange == -1) {
+        if (scoreChange <= 0) {
             gameView->GameScore += scoreChange;
         }
         else if (scoreChange == 10) deductHealth(gameView->Dracula, 10);

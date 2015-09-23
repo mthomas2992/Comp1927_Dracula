@@ -17,7 +17,7 @@ Places.o : Places.c Places.h
 Players.o : Players.c Players.h
 Map.o : Map.c Map.h Places.o
 GameView.o : GameView.c GameView.h Players.o
-HunterView.o : HunterView.c HunterView.h GameView.o
+HunterView.o : HunterView.c HunterView.h GameView.o Players.o Places.o
 DracView.o : DracView.c DracView.h GameView.o Places.o Map.o Players.o
 
 

@@ -86,8 +86,8 @@ typedef int LocationID;
 #define SARAGOSSA               56
 #define SARAJEVO                57
 #define SOFIA                   58
-#define ST_JOSEPH_AND_ST_MARYS  59
-#define STRASBOURG              60
+#define STRASBOURG              59
+#define ST_JOSEPH_AND_ST_MARYS  60
 #define SWANSEA                 61
 #define SZEGED                  62
 #define TOULOUSE                63

@@ -1,7 +1,6 @@
 GameView --- Touch up, more test cases, handle traps and vamps (Ash)
-HunterView --- everything not done yet
-DracView --- GiveMeTHeTrail, Whatsthere, LastMove
+HunterView --- everything done, expand for test Cases 
+DracView --- Whatsthere
 
-Update MakeFile (Ash)
 
 Binary Search things (Ash)
