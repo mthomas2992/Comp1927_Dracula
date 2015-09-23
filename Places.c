@@ -1,6 +1,7 @@
 // Places.c ... implementation of Places
 
 #include <stdlib.h>
+#include <stdio.h>
 #include <assert.h>
 #include <string.h>
 #include "Places.h"
@@ -138,11 +139,13 @@ int nameToID(char *name)
 //Binary search that searches the places aray for the bounds given MT
 int binarystringsearch(int max, int min,char *abbrev){
   Place *p;
-  int search;
+  int search=0;
   while (min<=max){ //while not found
-    if ((max-min)%2==0)search=(max-min)/2; //if even
-    else search=((max-min)-1)/2; //unsure if this rounds right may need to test
+    //printf("search %d\n",search);
+    if ((max-min)%2==0) search=(max-min)/2; //if even
+    else if ((max-min)%2==1)search=((max-min)-1)/2; //unsure if this rounds right may need to test
     p=&places[search];
+    //printf("p->abbrev[%d] is %s while abbrev is %s\n",search,p->abbrev,abbrev);
     if (strcmp(abbrev,p->abbrev)==0) return p->id; //found value
     else if (strcmp(abbrev,p->abbrev)>0) max=search-1; //higher
     else if (strcmp(abbrev,p->abbrev)<0) min=search+1; //lower
@@ -153,6 +156,7 @@ int binarystringsearch(int max, int min,char *abbrev){
 int abbrevToID(char *abbrev)
 {
    int id=-1;
+   printf("called\n");
    id=binarystringsearch(MAX_MAP_LOCATION,MIN_MAP_LOCATION,abbrev);
    if (id!=-1) return id;
    id=binarystringsearch(79,71,abbrev);
