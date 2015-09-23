@@ -135,8 +135,6 @@ int nameToID(char *name)
    }
    return NOWHERE;
 }
-
-// given a Place abbreviation (2 char), return its ID number
 int abbrevToID(char *abbrev)
 {
    // an attempt to optimise a linear search
