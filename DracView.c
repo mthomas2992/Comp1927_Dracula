@@ -11,7 +11,7 @@
 struct dracView {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     GameView gameView;
-    
+
 };
 
 
@@ -104,7 +104,7 @@ void giveMeTheTrail(DracView currentView, PlayerID player,
                             LocationID trail[TRAIL_SIZE])
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    
+
     getHistory(currentView->gameView, player, trail);
 }
 
@@ -114,7 +114,7 @@ void giveMeTheTrail(DracView currentView, PlayerID player,
 LocationID *whereCanIgo(DracView currentView, int *numLocations, int road, int sea)
 {
     //untested, will copy over to hunter when tested
-    return connectedLocations(currentView->gameView, numLocations, 
+    return connectedLocations(currentView->gameView, numLocations,
 			      whereIs(currentView, 4), 4, giveMeTheRound(currentView), road, 0, sea);
 
 }
@@ -124,8 +124,6 @@ LocationID *whereCanTheyGo(DracView currentView, int *numLocations,
                            PlayerID player, int road, int rail, int sea)
 {
     //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    
-    return connectedLocations(currentView->gameView, numLocations, 
+    return connectedLocations(currentView->gameView, numLocations,
 			      whereIs(currentView, player), player, giveMeTheRound(currentView), road, rail, sea);
-    return NULL;
 }

@@ -135,23 +135,27 @@ int nameToID(char *name)
    }
    return NOWHERE;
 }
-
+//Binary search that searches the places aray for the bounds given MT
+int binarystringsearch(int max, int min){
+  int search;
+  while (min<=max){ //while not found
+    if ((max-min)%2==0)search=(max-min)/2; //if even
+    else search=((max-min)-1)/2; //unsure if this rounds right may need to test
+    p=&places[search];
+    if (strcmp(abbrev,p->abbrev)==0) return p->id; //found value
+    else if (strcmp(abbrev,p->abbrev)>0) max=search-1; //higher
+    else if (strcmp(abbrev,p->abbrev)<0) min=search+1; //lower
+  }
+  return -1; //if nothing is found
+}
 // given a Place abbreviation (2 char), return its ID number
 int abbrevToID(char *abbrev)
 {
-   // an attempt to optimise a linear search
-   Place *p;
-   Place *first = &places[MIN_MAP_LOCATION];
-   Place *last = &places[MAX_MAP_LOCATION];
-   for (p = first; p <= last; p++) {
-      char *c = p->abbrev;
-      if (c[0] == abbrev[0] && c[1] == abbrev[1] && c[2] == '\0') return p->id;
-   }
-   first = &places[71];
-   last = &places[79];
-   for (p=first; p<=last; p++) {
-      char *c = p->abbrev;
-      if (c[0] == abbrev[0] && c[1] == abbrev[1] && c[2] == '\0') return p->id;
-   }
+   int id=-1;
+   id=binarystringsearch(MAX_MAP_LOCATION,MIN_MAP_LOCATION);
+   if (id!=-1) return id;
+   id=binarystringsearch(79,71);
+   if (id!=-1) return id;
+
    return NOWHERE;
 }
