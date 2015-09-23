@@ -136,7 +136,8 @@ int nameToID(char *name)
    return NOWHERE;
 }
 //Binary search that searches the places aray for the bounds given MT
-int binarystringsearch(int max, int min){
+int binarystringsearch(int max, int min,char *abbrev){
+  Place *p;
   int search;
   while (min<=max){ //while not found
     if ((max-min)%2==0)search=(max-min)/2; //if even
@@ -152,9 +153,9 @@ int binarystringsearch(int max, int min){
 int abbrevToID(char *abbrev)
 {
    int id=-1;
-   id=binarystringsearch(MAX_MAP_LOCATION,MIN_MAP_LOCATION);
+   id=binarystringsearch(MAX_MAP_LOCATION,MIN_MAP_LOCATION,abbrev);
    if (id!=-1) return id;
-   id=binarystringsearch(79,71);
+   id=binarystringsearch(79,71,abbrev);
    if (id!=-1) return id;
 
    return NOWHERE;
