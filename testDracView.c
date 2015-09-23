@@ -37,7 +37,7 @@ int main()
     LocationID history[TRAIL_SIZE];
     giveMeTheTrail(dv,PLAYER_DRACULA,history);
     assert(history[0] == GENEVA);
-    assert(history[2] == UNKNOWN_LOCATION);
+    assert(history[1] == UNKNOWN_LOCATION);
     giveMeTheTrail(dv,PLAYER_LORD_GODALMING,history);
     assert(history[0] == GENEVA);
     assert(history[1] == STRASBOURG);

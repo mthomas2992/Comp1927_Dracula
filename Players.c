@@ -94,7 +94,7 @@ int getPlayerHistory(Player p, int i)
 void updatePlayerHistory(Player p)
 {
     int i;
-    for (i=6; i>0; i--) {
+    for (i=5; i>0; i--) {
         p->Location_History[i] = p->Location_History[i-1];
     }
     p->Location_History[0] = p->Location;

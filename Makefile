@@ -1,8 +1,12 @@
 CC = gcc
 CFLAGS = -Wall -Werror -g
-BINS = testGameView testHunterView testDracView
+BINS = testGameView testHunterView testDracView customViewTest
 
 all : $(BINS)
+
+customViewTest :  customViewTest.o GameView.o Map.o Places.o Players.o
+customViewTest.o : customViewTest.c Globals.h Game.h
+
 
 testGameView : testGameView.o GameView.o Map.o Places.o Players.o
 testGameView.o : testGameView.c Globals.h Game.h 

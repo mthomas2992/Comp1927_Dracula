@@ -160,7 +160,7 @@ void getHistory(GameView currentView, PlayerID player,
                             LocationID trail[TRAIL_SIZE])
 {
     int i;
-    for (i=0; i<=TRAIL_SIZE; i++){
+    for (i=0; i<TRAIL_SIZE; i++){
         if (player == 0) trail[i] = getPlayerHistory(currentView->Lord_Godalming, i);
 	else if (player == 1) trail[i] = getPlayerHistory(currentView->Dr_Seward, i);
 	else if (player == 2) trail[i] = getPlayerHistory(currentView->Van_Helsing, i);
