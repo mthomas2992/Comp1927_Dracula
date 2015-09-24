@@ -71,7 +71,7 @@ int doPlayerTurn(Player p, char* detail)
         if (p->Location == DOUBLE_BACK_4) locationModifier = 4;
         if (p->Location == DOUBLE_BACK_5) locationModifier = 5;
         if (idToType(p->Location_History[locationModifier]) == SEA) p->health-=2;
-        if (idToType(p->Location_History[locationModifier]) == CASTLE_DRACULA) p->health += 10;
+        if (p->Location_History[locationModifier] == CASTLE_DRACULA) p->health += LIFE_GAIN_CASTLE_DRACULA;
     }
     return scoreResult;
 }

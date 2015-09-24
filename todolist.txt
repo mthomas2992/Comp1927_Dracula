@@ -1,6 +1,7 @@
-GameView --- Touch up, more test cases, handle traps and vamps (Ash)
-HunterView --- everything done, expand for test Cases 
-DracView --- Whatsthere
+
+Life Gain for Hunters When they Rest
+Train locations per round
+More complex test cases
 
 
 Binary Search things (Ash)
