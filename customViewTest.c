@@ -181,16 +181,9 @@ int main()
     printf("passed\n");
 
     printf("\n\tGame #3, Godalmings Turn, 1 round\n");
-    gv=newGameView("GEDT... SGET... HZUT... MCAT... DCF.V.. ", messages4);
+    gv=newGameView("GEDT... SGET... HZUT... MCAT... DCF.V..", messages4);
     printf("Score And Round Tests\n");
-    /*
-    When the printf below is commented out the assert fails, however when it
-    is commented in it passes then fails on current player
-    round should be 1 right? 
-    */
-    //printf("get round returning %d\n",getRound(gv));
-    assert(getRound(gv) == 2); //unsure if this is right
-    printf("getCurrent player returning %d\n",getCurrentPlayer(gv));
+    assert(getRound(gv) == 1); //unsure if this is right
     assert(getCurrentPlayer(gv) == 0);
     assert(getScore(gv) == (GAME_START_SCORE-1));
     printf("Health Tests\n");
@@ -204,7 +197,7 @@ int main()
 
     printf("\n\tGame #4, Godalmings Turn, 2 rounds\n");
     gv=newGameView("GEDT... SGET... HZUT... MCAT... DCF.V.. "
-                  "GED.... SGE.... HZU.... MCA.... DAS..V. ", messages4);
+                  "GED.... SGE.... HZU.... MCA.... DAS..V.", messages4);
     printf("Score And Round Tests\n");
     assert(getRound(gv) == 2);
     assert(getCurrentPlayer(gv) == 0);
