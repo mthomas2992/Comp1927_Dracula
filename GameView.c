@@ -179,8 +179,6 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
                                LocationID from, PlayerID player, Round round,
                                int road, int rail, int sea)
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    // This should be easy enough to do with the week 7 code
     int i,n=0;    
     int *locations = malloc(71*sizeof(int));
     locations[n++] = from;

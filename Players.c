@@ -43,7 +43,7 @@ int doPlayerTurn(Player p, char* detail)
 
     p->Location = abbrevToID(detail+1);
     updatePlayerHistory(p);
-    if (p->player != 4) //for hunters
+    if (p->player != 4) { //for hunters
         for (i=3; i<=6; i++) {
           //  while (detail[i] == '.') continue;
             if (detail[i] == 'T') p->health -= 2;
@@ -64,6 +64,7 @@ int doPlayerTurn(Player p, char* detail)
           p->health=p->health+3;
           if (p->health>9) p->health=9; //to ensure health never exceeds 9
         }
+    }
     else if (p->player==4) {
         //vampire matured
         if (detail[5] == 'V' || detail[6] == 'V') {
