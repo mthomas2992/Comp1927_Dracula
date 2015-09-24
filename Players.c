@@ -56,13 +56,13 @@ int doPlayerTurn(Player p, char* detail)
             }
         }
         //moved these out of for loop to prevent repeat execution MT
-        if (p->Location==p->Location_History[1]){ //if rested
-          p->health=p->health+3;
-          if (p->health>9) p->health=9; //to ensure health never exceeds 9
-        }
         if (p->health <= 0) { //if dead unsure if should occur before or after heal
           p->Location = ST_JOSEPH_AND_ST_MARYS;
           scoreResult -= 6;
+        }
+        if (p->Location==p->Location_History[1]){ //if rested
+          p->health=p->health+3;
+          if (p->health>9) p->health=9; //to ensure health never exceeds 9
         }
     else if (p->player==4) {
         //vampire matured
