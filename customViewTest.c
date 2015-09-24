@@ -9,9 +9,9 @@
 int main()
 {
     GameView gv;
-    int i; 
+    int i;
     int size, seen[NUM_MAP_LOCATIONS], *edges;
- 
+
     printf("\t\tTest From PastPlays in Bugfixes\n");
     printf("\n\tGame #0 samples, Start of Round 1\n");
     PlayerMessage messages1[] = {"Hello", "There", "This", "Should", "Be Good"};
@@ -22,16 +22,16 @@ int main()
     assert(getScore(gv) == GAME_START_SCORE -1);
     printf("Passed Score Tests\n");
     printf("Location Tests\n");
-    assert(getLocation(gv,PLAYER_LORD_GODALMING) == MANCHESTER); 
+    assert(getLocation(gv,PLAYER_LORD_GODALMING) == MANCHESTER);
     assert(getLocation(gv,PLAYER_DR_SEWARD) == 	PLYMOUTH);
     assert(getLocation(gv,PLAYER_VAN_HELSING) == AMSTERDAM);
     assert(getLocation(gv,PLAYER_MINA_HARKER) == PARIS);
     assert(getLocation(gv,PLAYER_DRACULA) == CITY_UNKNOWN);
     printf("Passed Location Tests\n");
-    disposeGameView(gv);  
+    disposeGameView(gv);
 
     printf("\n\tGame #0 samples, End of Round 1\n");
-    PlayerMessage messages2[] = {"Hello", "There", "This", "Should", "Be Good", 
+    PlayerMessage messages2[] = {"Hello", "There", "This", "Should", "Be Good",
                                  "Yas", "I'm Getting", "A", "Bit", "Excited"};
     gv = newGameView("GMN.... SPL.... HAM.... MPA.... DC?.V.. "
                      "GLV.... SLO.... HNS.... MST.... DC?T...", messages2);
@@ -39,7 +39,7 @@ int main()
     LocationID history[TRAIL_SIZE];
     getHistory(gv, 0, history);
     assert(history[0] == LIVERPOOL);
-    assert(history[1] == MANCHESTER); 
+    assert(history[1] == MANCHESTER);
     assert(history[2] == UNKNOWN_LOCATION);
     getHistory(gv,1,history);
     assert(history[0] == LONDON);
@@ -82,7 +82,7 @@ int main()
     assert(history[3] == IRISH_SEA);
     assert(history[4] == LIVERPOOL);
     assert(history[5] == MANCHESTER);
-    
+
     getHistory(gv,1,history);
     assert(history[0] == LONDON);
     assert(history[1] == PLYMOUTH);
@@ -112,6 +112,7 @@ int main()
     assert(history[2] == CASTLE_DRACULA);
     assert(history[3] == CITY_UNKNOWN);
     assert(history[4] == CITY_UNKNOWN);
+    disposeGameView(gv);
     printf("Passed Location History Tests\n");
 
     printf("\n\tChecking Empty Game Rail Connections for Paris\n");
@@ -120,7 +121,7 @@ int main()
     edges = connectedLocations(gv, &size, PARIS, PLAYER_LORD_GODALMING, 0,0,1,0);
     memset(seen, 0, NUM_MAP_LOCATIONS*sizeof(int));
     for (i=0; i < size; i++) seen[edges[i]] = 1;
-    assert(size = 1); 
+    assert(size = 1);
     assert(seen[PARIS]);
     free(edges);
     printf("passed\n");
@@ -176,9 +177,46 @@ int main()
     assert(getHealth(gv, 2) == 9);
     assert(getHealth(gv, 3) == 9);
     assert(getHealth(gv, 4) == 20);
+    disposeGameView(gv);
     printf("passed\n");
-   
+
+    printf("\n\tGame #3, Godalmings Turn, 1 round\n");
+    gv=newGameView("GEDT... SGET... HZUT... MCAT... DCF.V.. ", messages4);
+    printf("Score And Round Tests\n");
+    /*
+    When the printf below is commented out the assert fails, however when it
+    is commented in it passes then fails on current player
+    round should be 1 right? 
+    */
+    //printf("get round returning %d\n",getRound(gv));
+    assert(getRound(gv) == 2); //unsure if this is right
+    printf("getCurrent player returning %d\n",getCurrentPlayer(gv));
+    assert(getCurrentPlayer(gv) == 0);
+    assert(getScore(gv) == (GAME_START_SCORE-1));
+    printf("Health Tests\n");
+    assert(getHealth(gv, 0) == 7);
+    assert(getHealth(gv, 1) == 7);
+    assert(getHealth(gv, 2) == 7);
+    assert(getHealth(gv, 3) == 7);
+    assert(getHealth(gv, 4) == 40);
+    disposeGameView(gv);
+    printf ("passed\n");
+
+    printf("\n\tGame #4, Godalmings Turn, 2 rounds\n");
+    gv=newGameView("GEDT... SGET... HZUT... MCAT... DCF.V.. "
+                  "GED.... SGE.... HZU.... MCA.... DAS..V. ", messages4);
+    printf("Score And Round Tests\n");
+    assert(getRound(gv) == 2);
+    assert(getCurrentPlayer(gv) == 0);
+    assert(getScore(gv) == (GAME_START_SCORE-15)); //2 for round 13 for matured
+    printf("Health Tests\n");
+    assert(getHealth(gv, 0) == 9); //should be healed from resting
+    assert(getHealth(gv, 1) == 9); //test to ensure does not exceed
+    assert(getHealth(gv, 2) == 9);
+    assert(getHealth(gv, 3) == 9);
+    assert(getHealth(gv, 4) == 38); // lost two due to ending in sea
+    disposeGameView(gv);
+    printf("passed\n");
+
     return 0;
 }
-
-
