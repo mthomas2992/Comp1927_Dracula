@@ -10,13 +10,8 @@
 
 // #include "Map.h" ... if you decide to use the Map ADT
 struct gameView {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
-    //
-    LocationID vampLoc;
-    LocationID trapLocs[6];
-    int trapNum;
-    Round RoundNum;
     PlayerID CurrentPlayer;
+    Round RoundNum;
     Map europe;
 
     Player Lord_Godalming;
@@ -33,16 +28,12 @@ struct gameView {
 // Creates a new GameView to summarise the current state of the game
 GameView newGameView(char *pastPlays, PlayerMessage messages[])
 {
-    //REPLACE THIS WITH YOUR OWN IMPLEMENTATION
     GameView gameView = malloc(sizeof(struct gameView));
     // INITIALIZE ALL THE THINGS IN THE GAMEVIEW STRUCT
     // WILL FINISH THIS LAST
     gameView->RoundNum = 0;
     gameView->CurrentPlayer = 0;
     gameView->GameScore = GAME_START_SCORE;
-    gameView->vampLoc = -1;
-    gameView->trapNum = 0;
-    gameView->trapLocs[0] = -1;
     gameView->europe = newMap();
 
     gameView->Lord_Godalming = initPlayer(PLAYER_LORD_GODALMING);
@@ -181,17 +172,18 @@ LocationID *connectedLocations(GameView currentView, int *numLocations,
 {
     int i,n=0;    
     int *locations = malloc(71*sizeof(int));
-    locations[n++] = from;
+    int maxsteps = rail*((player+round) % 4);
+    if (!rail || maxsteps == 0) locations[n++] = from;
 
     for (i=0; i<=70; i++) {
         if (road && connections(currentView->europe, from, i, ROAD)) {
             locations[n++] = i;
         } else if (sea && connections(currentView->europe, from, i, BOAT)) {
             locations[n++] = i;
-        } else if (rail && player!= 4 && connections(currentView->europe, from, i, RAIL)) {
-            locations[n++] = i;
-            // remember to update this for rail!!!
         }
+    }  
+    if (rail && player!= 4) {
+            railConnections(currentView->europe, from, maxsteps, locations, &n); 
     }
     *numLocations = n;
    

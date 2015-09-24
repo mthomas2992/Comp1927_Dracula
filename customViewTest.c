@@ -9,7 +9,8 @@
 int main()
 {
     GameView gv;
-
+    int i; 
+    int size, seen[NUM_MAP_LOCATIONS], *edges;
  
     printf("\t\tTest From PastPlays in Bugfixes\n");
     printf("\n\tGame #0 samples, Start of Round 1\n");
@@ -113,6 +114,47 @@ int main()
     assert(history[4] == CITY_UNKNOWN);
     printf("Passed Location History Tests\n");
 
+    printf("\n\tChecking Empty Game Rail Connections for Paris\n");
+    gv = newGameView("", messages1);
+    printf("Checking Paris rail connections for Godalming Rd 0 (up to 0 steps)\n");
+    edges = connectedLocations(gv, &size, PARIS, PLAYER_LORD_GODALMING, 0,0,1,0);
+    memset(seen, 0, NUM_MAP_LOCATIONS*sizeof(int));
+    for (i=0; i < size; i++) seen[edges[i]] = 1;
+    assert(size = 1); 
+    assert(seen[PARIS]);
+    free(edges);
+    printf("passed\n");
+
+    printf("Checking Paris rail connections for Seward Rd 0 (up to 1 steps)\n");
+    edges = connectedLocations(gv, &size, PARIS, PLAYER_DR_SEWARD, 0,0,1,0);
+    memset(seen, 0, NUM_MAP_LOCATIONS*sizeof(int));
+    for (i=0; i < size; i++) seen[edges[i]] = 1;
+    assert(size = 5); assert(seen[BORDEAUX]); assert(seen[MARSEILLES]);
+    assert(seen[LE_HAVRE]); assert(seen[BRUSSELS]); assert(seen[PARIS]);
+    free(edges);
+    printf("passed\n");
+
+    printf("Checking Paris rail connections for Helsing  Rd 0 (up to 2 steps)\n");
+    edges = connectedLocations(gv, &size, PARIS, PLAYER_VAN_HELSING, 0,0,1,0);
+    memset(seen, 0, NUM_MAP_LOCATIONS*sizeof(int));
+    for (i=0; i < size; i++) seen[edges[i]] = 1;
+    assert(size = 7); assert(seen[BORDEAUX]); assert(seen[MARSEILLES]);
+    assert(seen[LE_HAVRE]); assert(seen[BRUSSELS]); assert(seen[PARIS]);
+    assert(seen[COLOGNE]); assert(seen[SARAGOSSA]);
+    free(edges);
+    printf("passed\n");
+
+    printf("Checking Paris rail connections for Mina Rd 0 (up to 3 steps)\n");
+    edges = connectedLocations(gv, &size, PARIS, PLAYER_MINA_HARKER, 0,0,1,0);
+    memset(seen, 0, NUM_MAP_LOCATIONS*sizeof(int));
+    for (i=0; i < size; i++) seen[edges[i]] = 1;
+    assert(size = 10); assert(seen[BORDEAUX]); assert(seen[MARSEILLES]);
+    assert(seen[LE_HAVRE]); assert(seen[BRUSSELS]); assert(seen[PARIS]);
+    assert(seen[COLOGNE]); assert(seen[SARAGOSSA]);
+    assert(seen[BARCELONA]); assert(seen[MADRID]); assert(seen[FRANKFURT]);
+    free(edges);
+    printf("passed\n");
+    disposeGameView(gv);
     return 0;
 }
 
