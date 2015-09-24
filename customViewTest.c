@@ -155,6 +155,29 @@ int main()
     free(edges);
     printf("passed\n");
     disposeGameView(gv);
+
+    printf("\n\tGame #2, Godalmings Turn, 7 rounds\n");
+    PlayerMessage messages4[] = {""};
+    gv = newGameView("GED.... SGE.... HZU.... MCA.... DCF.V.. "
+                   "GMN.... SCFVD.. HGE.... MLS.... DBOT... "
+                   "GLO.... SMR.... HCF.... MMA.... DC?T... "
+                   "GPL.... SMS.... HMR.... MGR.... DBAT... "
+                   "GLO.... SBATD.. HMS.... MMA.... DC?T... "
+                   "GPL.... SSJ.... HBA.... MGR.... DC?T... "
+                   "GPL.... SSJ.... HBA.... MGR.... DC?T...", messages4);
+    printf("Score And Round Tests\n");
+    assert(getRound(gv) == 7);
+    assert(getCurrentPlayer(gv) == 0);
+    assert(getScore(gv) == (GAME_START_SCORE - 7 - 6));
+    printf("passed\n");
+    printf("Health Tests\n");
+    assert(getHealth(gv, 0) == 9);
+    assert(getHealth(gv, 1) == 9);
+    assert(getHealth(gv, 2) == 9);
+    assert(getHealth(gv, 3) == 9);
+    assert(getHealth(gv, 4) == 20);
+    printf("passed\n");
+   
     return 0;
 }
 

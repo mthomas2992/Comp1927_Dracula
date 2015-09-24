@@ -2,11 +2,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 #include "Globals.h"
 #include "Game.h"
 #include "GameView.h"
 #include "DracView.h"
 #include "Map.h"
+
+#define CHARACTERS_IN_ROUND 40
+#define LONGEST_GAME 366*40 //the longest the past plays string could ever be is 366 rounds long
 
 struct dracView {
     
@@ -23,13 +27,14 @@ struct dracView {
 DracView newDracView(char *pastPlays, PlayerMessage messages[])
 {
     DracView dracView = malloc(sizeof(struct dracView));
-    
+    char *pastplays = malloc(LONGEST_GAME);
+    strcpy(pastplays, pastPlays);
     dracView->vampLoc = -1;
     dracView->trapNum = 0;
     dracView->trapLocs[0] = -1;
-    dracView->gameView = newGameView(pastPlays, messages);
-
     int i,j,k,found;
+    //parse the pastPlays String to edit any Dracula Location and update trap/vamp locs
+
 
     for (i=0; pastPlays[i] != '\0'; i+=7) {
         if (pastPlays[i] == ' ') i++;
@@ -53,25 +58,50 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
             }
         }
         else if (pastPlays[i] == 'D') {
+            if (abbrevToID(&(pastplays[i+1])) == HIDE) {
+                printf("%d\n", i);
+                pastplays[i+1] = pastplays[i+1-CHARACTERS_IN_ROUND];
+                pastplays[i+2] = pastplays[i+2-CHARACTERS_IN_ROUND];
+            } else if (abbrevToID(&(pastplays[i+1])) == DOUBLE_BACK_1) {
+                pastplays[i+1] = pastplays[i+1-2*CHARACTERS_IN_ROUND];
+                pastplays[i+2] = pastplays[i+2-2*CHARACTERS_IN_ROUND];
+            } else if (abbrevToID(&(pastplays[i+1])) == DOUBLE_BACK_2) {
+                pastplays[i+1] = pastplays[i+1-3*CHARACTERS_IN_ROUND];
+                pastplays[i+2] = pastplays[i+2-3*CHARACTERS_IN_ROUND];
+            } else if (abbrevToID(&(pastplays[i+1])) == DOUBLE_BACK_3) {
+                pastplays[i+1] = pastplays[i+1-4*CHARACTERS_IN_ROUND];
+                pastplays[i+2] = pastplays[i+2-4*CHARACTERS_IN_ROUND];
+            } else if (abbrevToID(&(pastplays[i+1])) == DOUBLE_BACK_4) {
+                pastplays[i+1] = pastplays[i+1-5*CHARACTERS_IN_ROUND];
+                pastplays[i+2] = pastplays[i+2-5*CHARACTERS_IN_ROUND];
+            } else if (abbrevToID(&(pastplays[i+1])) == DOUBLE_BACK_5) {
+                pastplays[i+1] = pastplays[i+1-6*CHARACTERS_IN_ROUND];
+                pastplays[i+2] = pastplays[i+2-6*CHARACTERS_IN_ROUND];
+            } else if (abbrevToID(&(pastplays[i+1])) == TELEPORT) {
+                pastplays[i+1] = 'C';
+                pastplays[i+2] = 'D';
+            }
             // handle Dracula placing traps/vampires, traps expiring and vampires maturing
-            if (pastPlays[i+3] == 'T') {
-                dracView->trapLocs[dracView->trapNum++] = abbrevToID(&(pastPlays[i+1]));
+            if (pastplays[i+3] == 'T') {
+                dracView->trapLocs[dracView->trapNum++] = abbrevToID(&(pastplays[i+1]));
             }
-            if (pastPlays[i+4] == 'V') {
-                dracView->vampLoc = abbrevToID(&(pastPlays[i+1]));
+            if (pastplays[i+4] == 'V') {
+                dracView->vampLoc = abbrevToID(&(pastplays[i+1]));
             }
-            if (pastPlays[i+5] == 'M'){
+            if (pastplays[i+5] == 'M'){
                 for (k=1; k!= dracView->trapNum; k++) {
                     dracView->trapLocs[k-1] = dracView->trapLocs[k];
                 }
                 dracView->trapNum--;
             } 
-            else if (pastPlays[i+5] == 'V' || pastPlays[i+6] == 'V') {
+            else if (pastplays[i+5] == 'V' || pastplays[i+6] == 'V') {
                  dracView->vampLoc = -1;
             } 
         }
     }
 
+    dracView->gameView = newGameView(pastplays, messages);
+    free(pastplays);
     return dracView;
 }
 
