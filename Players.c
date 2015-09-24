@@ -15,7 +15,7 @@ struct players{
     PlayerID player;
     int health;
     int Location;
-    int Location_History[6];    
+    int Location_History[6];
 
 
 };
@@ -38,14 +38,14 @@ Player initPlayer(PlayerID player)
 int doPlayerTurn(Player p, char* detail)
 {
     int i;
-    int scoreResult = 0; 
+    int scoreResult = 0;
     int locationModifier = 0;
 
     p->Location = abbrevToID(detail+1);
     updatePlayerHistory(p);
-    if (p->player != 4) 
+    if (p->player != 4) //for hunters
         for (i=3; i<=6; i++) {
-          //  while (detail[i] == '.') continue; 
+          //  while (detail[i] == '.') continue;
             if (detail[i] == 'T') p->health -= 2;
             else if (detail[i] == 'V') {
 
@@ -54,18 +54,23 @@ int doPlayerTurn(Player p, char* detail)
                  p->health -= 4;
                  scoreResult += 10;
             }
-            if (p->health <= 0) {
-              p->Location = ST_JOSEPH_AND_ST_MARYS;
-              scoreResult -= 6;
-            }
+        }
+        //moved these out of for loop to prevent repeat execution MT
+        if (p->Location==p->Location_History[1]){ //if rested
+          p->health=p->health+3;
+          if (p->health>9) p->health=9; //to ensure health never exceeds 9
+        }
+        if (p->health <= 0) { //if dead unsure if should occur before or after heal
+          p->Location = ST_JOSEPH_AND_ST_MARYS;
+          scoreResult -= 6;
         }
     else if (p->player==4) {
-        //vampire matured 
+        //vampire matured
         if (detail[5] == 'V' || detail[6] == 'V') {
             scoreResult -= 13;
         }
-        scoreResult -= 1;  
-        if (p->Location == DOUBLE_BACK_1) locationModifier = 1; 
+        scoreResult -= 1;
+        if (p->Location == DOUBLE_BACK_1) locationModifier = 1;
         if (p->Location == DOUBLE_BACK_2) locationModifier = 2;
         if (p->Location == DOUBLE_BACK_3) locationModifier = 3;
         if (p->Location == DOUBLE_BACK_4) locationModifier = 4;
