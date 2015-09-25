@@ -235,7 +235,7 @@ int main()
                   "GEDT... SGET... HZUT... MCAT... DC?.... " //6
                   "GMNT... SPLT... HNST... MPAT... DC?.... "//4
                   "GEDT... SGET... HZUT... MCAT... DC?.... "//2
-                  "GMNT... SPLT... HNST... MPAT... DC?.... ", messages4);
+                  "GMNT... SPLT... HNST... MPAT... DC?....", messages4);
     printf("Score And Round Tests\n");
     assert(getRound(gv) == 7);
     assert(getCurrentPlayer(gv) == 0);
