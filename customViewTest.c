@@ -211,5 +211,47 @@ int main()
     disposeGameView(gv);
     printf("passed\n");
 
+    printf("\n\tGame #5, Godalmings Turn, 3 rounds\n");
+    gv=newGameView("GEDT... SGET... HZUT... MCAT... DCF.V.. "
+                  "GMNT... SPLT... HNST... MPAT... DAS..V. "
+                  "GMN.... SPL.... HNS.... MPA.... DC?....", messages4);
+    printf("Score And Round Tests\n");
+    assert(getRound(gv) == 3);
+    assert(getCurrentPlayer(gv) == 0);
+    assert(getScore(gv) == (GAME_START_SCORE-16)); //3 for round 13 for matured
+    printf("Health Tests\n");
+    assert(getHealth(gv, 0) == 8); //loose 4 to two traps
+    assert(getHealth(gv, 1) == 8); //Gain 3 from one rest
+    assert(getHealth(gv, 2) == 8);
+    assert(getHealth(gv, 3) == 8);
+    assert(getHealth(gv, 4) == 38); // lost two due to ending in sea
+    disposeGameView(gv);
+    printf("passed\n");
+
+    printf("\n\tGame #6, Godalmings Turn, 7 rounds\n");
+    gv=newGameView("GEDT... SGET... HZUT... MCAT... DCF.V.. "
+                  "GMNT... SPLT... HNST... MPAT... DAS..V. "
+                  "GMN.... SPL.... HNS.... MPA.... DC?.... " //health at 8
+                  "GEDT... SGET... HZUT... MCAT... DC?.... " //6
+                  "GMNT... SPLT... HNST... MPAT... DC?.... "//4
+                  "GEDT... SGET... HZUT... MCAT... DC?.... "//2
+                  "GMNT... SPLT... HNST... MPAT... DC?.... ", messages4);
+    printf("Score And Round Tests\n");
+    assert(getRound(gv) == 7);
+    assert(getCurrentPlayer(gv) == 0);
+    assert(getScore(gv) == (GAME_START_SCORE-44)); //7 for round 13 for matured 6*4 for hunter deaths
+    printf("Health Tests\n");
+    assert(getHealth(gv, 0) == 9); //should now be reset to 9
+    assert(getHealth(gv, 1) == 9);
+    assert(getHealth(gv, 2) == 9);
+    assert(getHealth(gv, 3) == 9);
+    assert(getHealth(gv, 4) == 38); // lost two due to ending in sea
+    printf("Location Tests\n"); //locations should be reset
+    assert(getLocation(gv,0)==ST_JOSEPH_AND_ST_MARYS);
+    assert(getLocation(gv,1)==ST_JOSEPH_AND_ST_MARYS);
+    assert(getLocation(gv,2)==ST_JOSEPH_AND_ST_MARYS);
+    assert(getLocation(gv,3)==ST_JOSEPH_AND_ST_MARYS);
+    disposeGameView(gv);
+    printf("passed\n");
     return 0;
 }
