@@ -59,7 +59,6 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
         }
         else if (pastPlays[i] == 'D') {
             if (abbrevToID(&(pastplays[i+1])) == HIDE) {
-                printf("%d\n", i);
                 pastplays[i+1] = pastplays[i+1-CHARACTERS_IN_ROUND];
                 pastplays[i+2] = pastplays[i+2-CHARACTERS_IN_ROUND];
             } else if (abbrevToID(&(pastplays[i+1])) == DOUBLE_BACK_1) {
