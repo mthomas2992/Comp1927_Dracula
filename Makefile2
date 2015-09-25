@@ -1,14 +1,14 @@
 CC = gcc
 CFLAGS = -Wall -Werror -g
-BINS = testGameView testHunterView testDracView #customViewTest customDracTest
+BINS = testGameView testHunterView testDracView customViewTest customDracTest
 
 all : $(BINS)
 
-#customViewTest :  customViewTest.o GameView.o Map.o Places.o Players.o stack.o
-#customViewTest.o : customViewTest.c Globals.h Game.h
+customViewTest :  customViewTest.o GameView.o Map.o Places.o Players.o stack.o
+customViewTest.o : customViewTest.c Globals.h Game.h
 
-#customDracTest : customDracTest.o GameView.o DracView.o Map.o Places.o Players.o stack.o
-#customDracTest.o : customDracTest.c Globals.h Game.h
+customDracTest : customDracTest.o GameView.o DracView.o Map.o Places.o Players.o stack.o
+customDracTest.o : customDracTest.c Globals.h Game.h
 
 testGameView : testGameView.o GameView.o Map.o Places.o Players.o stack.o
 testGameView.o : testGameView.c Globals.h Game.h 
