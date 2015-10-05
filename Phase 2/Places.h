@@ -86,8 +86,8 @@ typedef int LocationID;
 #define SARAGOSSA               56
 #define SARAJEVO                57
 #define SOFIA                   58
-#define ST_JOSEPH_AND_ST_MARYS  59
-#define STRASBOURG              60
+#define STRASBOURG              59
+#define ST_JOSEPH_AND_ST_MARYS  60
 #define SWANSEA                 61
 #define SZEGED                  62
 #define TOULOUSE                63
@@ -102,6 +102,10 @@ typedef int LocationID;
 #define MIN_MAP_LOCATION         0
 #define MAX_MAP_LOCATION        70
 #define NUM_MAP_LOCATIONS       71
+
+#define MIN_DRAC_MAP_LOCATION   100
+#define MAX_DRAC_MAP_LOCATION   108
+#define NUM_DRAC_MAP_LOCATIONS  9
 
 // Other "locations"
 #define CITY_UNKNOWN            100
@@ -132,6 +136,6 @@ int abbrevToID(char *abbrev);
 #define isLand(place)  (idToType(place) == LAND)
 #define isSea(place)  (idToType(place) == SEA)
 
-#define validPlace(pid) (pid >= MIN_MAP_LOCATION && pid <= MAX_MAP_LOCATION)
-
+//#define validPlace(pid) (pid >= MIN_MAP_LOCATION && pid <= MAX_MAP_LOCATION)
+#define validPlace(pid) (pid >= MIN_MAP_LOCATION && pid <= MAX_DRAC_MAP_LOCATION)
 #endif

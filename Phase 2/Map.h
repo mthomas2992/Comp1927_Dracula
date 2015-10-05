@@ -3,6 +3,7 @@
 #ifndef MAP_H
 #define MAP_H
 
+#include "GameView.h"
 #include "Places.h"
 
 typedef struct edge{
@@ -20,5 +21,6 @@ void disposeMap(Map g);
 void showMap(Map g); 
 int  numV(Map g);
 int  numE(Map g, TransportID t);
-
+int connections(Map g, LocationID start, LocationID end, int type);
+int railConnections(Map g, LocationID start, int maxstep, LocationID locs[], int *numLocs);
 #endif

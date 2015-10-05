@@ -57,16 +57,20 @@ int getScore(GameView currentView);
 
 // Get the current health points for a given player
 // 'player' specifies which players's life/blood points to return
-//    and must be a value in the interval [0...9] for Hunters, or >0 for Dracula
+//    and must be a value in the interval [0...4] (see 'player' type)
 
 int getHealth(GameView currentView, PlayerID player);
 
 // Get the current location id of a given player
 // May be UNKNOWN_LOCATION if the player has not had a turn yet
 // (ie at the beginning of the game when the round is 0)
-// Otherwise for a hunter it should be an integer in the interval [0..70]
-// For dracula it should return his location at the start of the current round
-// Possible values for this:
+// otherwise for a hunter it should be an integer in the interval [0..70]
+// The given roundNumber is >= 0 and <= the current round number
+// 'whichHunter' specifies which hunter's location to return
+//    and must be a value in the interval [0...3] (see 'player' type)
+// Or for dracula it should
+// gets the location of Dracula at the start of a particular round
+// Returns an integer:
 //   in the interval [0...70] if Dracula was known to be in a city or sea
 //   CITY_UNKNOWN     if Dracula was in an unknown city
 //   SEA_UNKNOWN      if Dracula was in an unknown sea
@@ -88,6 +92,7 @@ LocationID getLocation(GameView currentView, PlayerID player);
 //   in the interval [0...70] if Dracula was known to be in a city or sea
 //   CITY_UNKNOWN     if Dracula was in an unknown city
 //   SEA_UNKNOWN      if Dracula was in an unknown sea
+
 //   HIDE             if Dracula was known to have made a hide move
 //   DOUBLE_BACK_N    where N is [0...5], if Dracula was known to have
 //                    made a double back move N positions back in the trail

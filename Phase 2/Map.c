@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include "Map.h"
 #include "Places.h"
+#include "stack.h"
+#include "GameView.h"
 
 typedef struct vNode *VList;
 
@@ -134,6 +136,66 @@ int numE(Map g, TransportID type)
     return nE;
 }
 
+// Returns if there is a direct connection between two nodes
+// using the specified connection type
+// Returns 0 if no direct connection (i.e. not adjacent in graph)
+int connections(Map g, LocationID start, LocationID end, int type)
+{
+   assert(g != NULL);
+   assert(start >= 0 && start <=70);
+   assert(end >= 0 && end <=70);
+
+   VList  curr;
+
+   if (start == end) return 0;
+
+   for (curr = g->connections[start]; curr!=NULL; curr=curr->next) {
+            if (curr->v == end && curr->type == type) {
+                      return 1;
+            }
+   }
+   return 0;
+}
+
+// Finds all the possible Rail Connections from a particular place 
+// based on Round and Player
+int railConnections(Map g, LocationID start, int maxstep, LocationID locs[], int *numLocs)
+{
+
+    if (maxstep == 0) return 0;
+
+    int *checked = calloc(NUM_MAP_LOCATIONS, sizeof(int));
+    int steps = 0;
+    int recentlyAdded = 0;
+    int i;
+    Stack checklist = newStack();
+    
+    pushOnto(checklist,start);
+
+    while(!emptyStack(checklist)) {
+        VList curr;
+        start = popFrom(checklist);
+        if (checked[start]) continue;
+        checked[start] = 1;
+        locs[(*numLocs)++] = start;
+        for (curr = g->connections[start]; curr!=NULL; curr=curr->next) {
+            if (curr->type == RAIL && !checked[curr->v]) {
+                pushOnto(checklist, curr->v);
+                recentlyAdded++;
+            }
+         }
+         steps++;
+         if (steps > maxstep) {
+             for(i=1; i<=recentlyAdded; i++) {
+             }
+             steps=0;
+         }
+         recentlyAdded=0;
+     }
+
+
+    return maxstep; 
+}
 // Add edges to Graph representing map of Europe
 static void addConnections(Map g)
 {
