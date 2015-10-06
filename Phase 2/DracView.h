@@ -121,7 +121,7 @@ LocationID *whereCanIgo(DracView currentView, int *numLocations, int road, int s
 // road, rail and sea are connections should only be considered
 //   if the road, rail, sea parameters are TRUE.
 // The size of the array is stored in the variable pointed to by numLocations
-// The array can be in any order but must contain unique entries
+// The array can be in any order but must contain unique entri  es
 // The function must take into account the round for determining how far
 //   a player can travel by rail
 // If the given player is Dracula, this function calls whereCanIgo()

@@ -8,7 +8,10 @@
 
 void decideDraculaMove(DracView gameState)
 {
-	// TODO ...
-	// Replace the line below by something better
-	registerBestPlay("CD","Mwuhahahaha");
+	int* numLocations
+	LocationID roads[];
+	roads=whereCanIgo(gameState,numLocations,1,0); //find all kind of road connections
+
+
+	registerBestPlay(roads[0],"Matt is Awesome");
 }

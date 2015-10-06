@@ -29,7 +29,7 @@ Places.o : Places.c Places.h
 Players.o : Players.c Players.h
 stack.o : stack.c stack.h
 Map.o : Map.c Map.h Places.o stack.h GameView.o
-GameView.o : GameView.c Globals.h GameView.o Players.o
+GameView.o : GameView.c Globals.h GameView.h Players.o
 HunterView.o : HunterView.c Globals.h HunterView.h Players.o Places.o GameView.o
 DracView.o : DracView.c Globals.h DracView.h Players.o Map.o GameView.o Places.o
 # if you use other ADTs, add dependencies for them here
