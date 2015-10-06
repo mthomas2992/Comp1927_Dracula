@@ -27,27 +27,67 @@ void decideHunterMove(HunterView gameState)
     */
     // TODO ...
     // Replace the line below by something better
-    //will rewrite areaOne
-    char areaOne[15]={"MA","GR","AL","BA","SR","SN","LS","CA","GW","DU","ED","MN","LV","SW","LO","PL"}; //then DU, GW
+    //WILL DEBUG THIS PART FIRST THEN ADD IF HP IS LESS THAN 6, WILL REST
+    
+    //Dublin and Galway visited twice
+    char areaOne[17]={"CA","GR","AL","BA","SR","SN","MA","LS","GW","DU","ED","MN","LO","SW","LV","PL","DU","GW"};
     //make another array to keep track when drac trail is found to deviate??
-    //if (giveMeTheRound(currentView) == 0) 
     char areaTwo[13]={"LE","NA","BR","PA","ST","NU","PR","BR","LI","FR","CO","HA","AM","BU"};
     char areaThree[13]={"FL","RO","BI","NP","GO","CG","MR","TO","BO","CF","GE","ZU","MI","VE"};
     char areaFour[15]={"AT","VA","SR","BE","SZ","ZA","VI","BD","KL","CD","GA","BC","CN","VR","SO","SA"};
-    int round = getRound(currentView);
-    if (whoAmI(currentView) == PLAYER_LORD_GODALMING) {
-        int i = round % 15;
+    
+    //previously used mod round number to determine which city player should
+    //visit, but player needs to rest so use array, keep track of city
+    int locationNo[NUM_PLAYERS-2] = {0};
+    
+    //if(giveMeRound(gameState) < 5) {
+    //int i = 0;
+    //}
+    
+    if (whoAmI(gameState) == PLAYER_LORD_GODALMING) {
+        
+        if (locationNo[PLAYER_LORD_GODALMING] == 17) {
+            locationNo[PLAYER_LORD_GODALMING] = 0;	
+        } else {
+            locationNo[PLAYER_LORD_GODALMING]++;
+        }
+        int i = locationNo[PLAYER_LORD_GODALMING];
         char place = areaOne[i]; //???
-    } else if (whoAmI(currentView) == PLAYER_DR_SEWARD) {
-        int i = round % 13;
+        
+    } else if (whoAmI(gameState) == PLAYER_DR_SEWARD) {
+        
+        if (locationNo[PLAYER_DR_SEWARD] == 17) {
+            locationNo[PLAYER_DR_SEWARD] = 0;	
+        } else {
+            locationNo[PLAYER_DR_SEWARD]++;
+        }
+        int i = locationNo[PLAYER_DR_SEWARD];
         char place = areaTwo[i]; //???
-    } else if (whoAmI(currentView) == PLAYER_VAN_HELSING) {
-        int i = round % 13;
+        
+    } else if (whoAmI(gameState) == PLAYER_VAN_HELSING) {
+        
+        if (locationNo[PLAYER_VAN_HELSING] == 17) {
+            locationNo[PLAYER_VAN_HELSING] = 0;	
+        } else {
+            locationNo[PLAYER_VAN_HELSING]++;
+        }
+        int i = locationNo[PLAYER_VAN_HELSING];
         char place = areaThree[i]; //???
+        
     } else {
-        int i = round % 15;
+        
+        if (locationNo[PLAYER_MINA_HARKER] == 17) {
+            locationNo[PLAYER_MINA_HARKER] = 0;	
+        } else {
+            locationNo[PLAYER_MINA_HARKER]++;
+        }
+        int i = locationNo[PLAYER_MINA_HARKER];
         char place = areaFour[i]; //???
     }
-    
+    /*
+    if (howHealthyIs(gameState, PLAYER_LORD_GODALMING) <= 6) {
+    	 
+    }
+    */
     registerBestPlay(place,"I'm on holiday in Geneva");
 }
