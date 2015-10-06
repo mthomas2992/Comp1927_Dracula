@@ -8,10 +8,11 @@
 
 void decideDraculaMove(DracView gameState)
 {
-	int* numLocations
-	LocationID roads[];
-	roads=whereCanIgo(gameState,numLocations,1,0); //find all kind of road connections
-
-
-	registerBestPlay(roads[0],"Matt is Awesome");
+	int* RoadnumLocations=0;
+	//int* SeanumLocations=0;
+	LocationID *roads;
+	//LocationID *seas;
+	roads=whereCanIgo(gameState,RoadnumLocations,1,0); //find all kind of road connections
+	//seas=whereCanIgo(gameState,SeanumLocations,0,1); //find all sea connection
+	registerBestPlay((char*)roads[0],"Matt is Awesome");
 }
