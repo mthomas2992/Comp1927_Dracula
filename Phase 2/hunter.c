@@ -22,7 +22,8 @@ void decideHunterMove(HunterView gameState)
     lower-half; Mina Harker takes rightmost region  
     3. Don't know how to hunt down Dracula
     4. Have hunters rest at ports (if possible) if blood points < 6(Dracula MAY less likely travel by sea [lose blood points])
-    5. 
+    5. atm did breadth-first search
+    6.  need to implement what happens if in hospital
     */
     // TODO ...
     // Replace the line below by something better
@@ -34,14 +35,19 @@ void decideHunterMove(HunterView gameState)
     char areaThree[13]={"FL","RO","BI","NP","GO","CG","MR","TO","BO","CF","GE","ZU","MI","VE"};
     char areaFour[15]={"AT","VA","SR","BE","SZ","ZA","VI","BD","KL","CD","GA","BC","CN","VR","SO","SA"};
     int round = getRound(currentView);
-    if (whoAmI(currentView) == 0) {
+    if (whoAmI(currentView) == PLAYER_LORD_GODALMING) {
         int i = round % 15;
         char place = areaOne[i]; //???
-    } else if (whoAmI(currentView) == 1) {
-    } else if (whoAmI(currentView) == 2) {
+    } else if (whoAmI(currentView) == PLAYER_DR_SEWARD) {
+        int i = round % 13;
+        char place = areaTwo[i]; //???
+    } else if (whoAmI(currentView) == PLAYER_VAN_HELSING) {
+        int i = round % 13;
+        char place = areaThree[i]; //???
     } else {
-        
+        int i = round % 15;
+        char place = areaFour[i]; //???
     }
     
-    registerBestPlay("GE","I'm on holiday in Geneva");
+    registerBestPlay(place,"I'm on holiday in Geneva");
 }
