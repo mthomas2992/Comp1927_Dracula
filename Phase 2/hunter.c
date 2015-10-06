@@ -26,11 +26,22 @@ void decideHunterMove(HunterView gameState)
     */
     // TODO ...
     // Replace the line below by something better
-    char areaOne[]={"MA","GR","AL","BA","SR","SN","LS","CA","GW","DU","ED","MN","LV","SW","LO","PL"}; //then DU, GW
+    //will rewrite areaOne
+    char areaOne[15]={"MA","GR","AL","BA","SR","SN","LS","CA","GW","DU","ED","MN","LV","SW","LO","PL"}; //then DU, GW
+    //make another array to keep track when drac trail is found to deviate??
     //if (giveMeTheRound(currentView) == 0) 
-    char areaTwo[]={"LE","NA","BR","PA","ST","NU","PR","BR","LI","FR","CO","HA","AM","BU"};
-    char areaThree[]={"FL","RO","BI","NP","GO","CG","MR","TO","BO","CF","GE","ZU","MI","VE"};
-    char areaFour[]={"AT","VA","SR","BE","SZ","ZA","VI","BD","KL","CD","GA","BC","CN","VR","SO","SA"};
+    char areaTwo[13]={"LE","NA","BR","PA","ST","NU","PR","BR","LI","FR","CO","HA","AM","BU"};
+    char areaThree[13]={"FL","RO","BI","NP","GO","CG","MR","TO","BO","CF","GE","ZU","MI","VE"};
+    char areaFour[15]={"AT","VA","SR","BE","SZ","ZA","VI","BD","KL","CD","GA","BC","CN","VR","SO","SA"};
+    int round = getRound(currentView);
+    if (whoAmI(currentView) == 0) {
+        int i = round % 15;
+        char place = areaOne[i]; //???
+    } else if (whoAmI(currentView) == 1) {
+    } else if (whoAmI(currentView) == 2) {
+    } else {
+        
+    }
     
     registerBestPlay("GE","I'm on holiday in Geneva");
 }
