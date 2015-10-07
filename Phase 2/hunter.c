@@ -27,19 +27,20 @@ void decideHunterMove(HunterView gameState)
     */
     // TODO ...
     // Replace the line below by something better
+    
     //WILL DEBUG THIS PART FIRST THEN ADD IF HP IS LESS THAN 6, WILL REST
     
     //Dublin and Galway visited twice
-    char areaOne[17]={"CA","GR","AL","BA","SR","SN","MA","LS","GW","DU","ED","MN","LO","SW","LV","PL","DU","GW"};
-    //make another array to keep track when drac trail is found to deviate??
-    char areaTwo[13]={"LE","NA","BR","PA","ST","NU","PR","BR","LI","FR","CO","HA","AM","BU"};
-    char areaThree[13]={"FL","RO","BI","NP","GO","CG","MR","TO","BO","CF","GE","ZU","MI","VE"};
-    char areaFour[15]={"AT","VA","SR","BE","SZ","ZA","VI","BD","KL","CD","GA","BC","CN","VR","SO","SA"};
+    const char *areaOne[18]={"CA","GR","AL","BA","SR","SN","MA","LS","GW","DU","ED","MN","LO","SW","LV","PL","DU","GW"};
+    //make anotherarray to keep track when drac trail is found to deviate??
+    const char *areaTwo[14]={"LE","NA","BR","PA","ST","NU","PR","BR","LI","FR","CO","HA","AM","BU"};
+    const char *areaThree[14]={"FL","RO","BI","NP","GO","CG","MR","TO","BO","CF","GE","ZU","MI","VE"};
+    const char *areaFour[16]={"AT","VA","SR","BE","SZ","ZA","VI","BD","KL","CD","GA","BC","CN","VR","SO","SA"};
     
     //previously used mod round number to determine which city player should
     //visit, but player needs to rest so use array, keep track of city
     int locationNo[NUM_PLAYERS-2] = {0};
-    
+    char place;
     //if(giveMeRound(gameState) < 5) {
     //int i = 0;
     //}
@@ -52,7 +53,7 @@ void decideHunterMove(HunterView gameState)
             locationNo[PLAYER_LORD_GODALMING]++;
         }
         int i = locationNo[PLAYER_LORD_GODALMING];
-        char place = areaOne[i]; //???
+        place = *areaOne[i]; //???
         
     } else if (whoAmI(gameState) == PLAYER_DR_SEWARD) {
         
@@ -62,7 +63,7 @@ void decideHunterMove(HunterView gameState)
             locationNo[PLAYER_DR_SEWARD]++;
         }
         int i = locationNo[PLAYER_DR_SEWARD];
-        char place = areaTwo[i]; //???
+        place = *areaTwo[i]; //???
         
     } else if (whoAmI(gameState) == PLAYER_VAN_HELSING) {
         
@@ -72,7 +73,7 @@ void decideHunterMove(HunterView gameState)
             locationNo[PLAYER_VAN_HELSING]++;
         }
         int i = locationNo[PLAYER_VAN_HELSING];
-        char place = areaThree[i]; //???
+        place = *areaThree[i]; //???
         
     } else {
         
@@ -82,7 +83,7 @@ void decideHunterMove(HunterView gameState)
             locationNo[PLAYER_MINA_HARKER]++;
         }
         int i = locationNo[PLAYER_MINA_HARKER];
-        char place = areaFour[i]; //???
+        place = *areaFour[i]; //???
     }
     /*
     if (howHealthyIs(gameState, PLAYER_LORD_GODALMING) <= 6) {
