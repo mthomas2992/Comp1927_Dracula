@@ -76,10 +76,10 @@ void decideDraculaMove(DracView gameState)
 
 		char*BestPlay;
 
-		PossiblesID0Size=1;
-		PossiblesID1Size=1;
-		PossiblesID2Size=1;
-		PossiblesID3Size=1;
+		PossiblesID0Size=2;
+		PossiblesID1Size=2;
+		PossiblesID2Size=2;
+		PossiblesID3Size=2;
 		for (i=0;i<RoadnumLocations;i++){
 			//if its possible that an encounter may occur
 			if (comparelocationarrays(roads[i],PossiblesID0,PossiblesID0Size)==0&&
