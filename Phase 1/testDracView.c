@@ -46,7 +46,7 @@ int main()
     assert(history[0] == ATLANTIC_OCEAN);
     assert(history[1] == ATLANTIC_OCEAN);
     assert(history[2] == UNKNOWN_LOCATION);
-    printf("passed\n");        
+    printf("passed\n");
     disposeDracView(dv);
 
     printf("Test for Dracula leaving minions\n");
@@ -108,6 +108,18 @@ int main()
     disposeDracView(dv);
 
     printf("passed\n");
+
+    dv = newDracView("GGE.... SGE.... HGE.... MGE.... DED.V.. "
+                     "GST.... SST.... HST.... MST.... DMNT... "
+                     "GST.... SST.... HST.... MST....", messages3);
+
+    //phase 2 experimenting
+    LocationID *PossiblesID0;
+    int PossiblesID0Size=0;
+    printf("before\n");
+    PossiblesID0=whereCanTheyGo(dv,&PossiblesID0Size,0,1,1,1);
+    printf("after\n");
+    printf("possiblesid0[0] %d",PossiblesID0[0]);
+
     return 0;
 }
-

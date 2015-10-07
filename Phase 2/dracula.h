@@ -5,3 +5,5 @@
 // Version: 1.0
 
 void decideDraculaMove(DracView gameState);
+
+int comparelocationarrays(char*string,LocationID* array, int* arraysize);
