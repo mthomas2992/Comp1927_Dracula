@@ -101,6 +101,13 @@ static Place places[] =
    {"Double Back 5", "D5", DOUBLE_BACK_5, UNKNOWN},
    {"Teleport", "TP", TELEPORT, LAND},
 };
+//given a place number, return its abbrev (MT)
+char *idToAbbrev(LocationID p)
+{
+   assert(validPlace(p));
+   if (p>MAX_MAP_LOCATION) p-=29;
+   return places[p].abbrev;
+}
 
 // given a Place number, return its name
 char *idToName(LocationID p)

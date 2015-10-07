@@ -157,7 +157,7 @@ int connections(Map g, LocationID start, LocationID end, int type)
    return 0;
 }
 
-// Finds all the possible Rail Connections from a particular place 
+// Finds all the possible Rail Connections from a particular place
 // based on Round and Player
 int railConnections(Map g, LocationID start, int maxstep, LocationID locs[], int *numLocs)
 {
@@ -169,7 +169,7 @@ int railConnections(Map g, LocationID start, int maxstep, LocationID locs[], int
     int recentlyAdded = 0;
     int i;
     Stack checklist = newStack();
-    
+
     pushOnto(checklist,start);
 
     while(!emptyStack(checklist)) {
@@ -194,7 +194,7 @@ int railConnections(Map g, LocationID start, int maxstep, LocationID locs[], int
      }
 
 
-    return maxstep; 
+    return maxstep;
 }
 // Add edges to Graph representing map of Europe
 static void addConnections(Map g)

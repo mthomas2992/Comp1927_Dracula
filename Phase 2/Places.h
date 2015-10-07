@@ -120,6 +120,8 @@ typedef int LocationID;
 #define UNKNOWN_LOCATION        -1
 #define NOWHERE                 UNKNOWN_LOCATION
 
+//given a place number, return its abbrev (MT)
+char *idToAbbrev(LocationID p);
 
 // given a Place number, return its name
 char *idToName(int place);
