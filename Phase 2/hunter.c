@@ -34,7 +34,7 @@ void decideHunterMove(HunterView gameState)
     
     if (whoAmI(gameState) == PLAYER_LORD_GODALMING) {
         
-        if (locationNo[PLAYER_LORD_GODALMING] == 17) {
+        if (locationNo[PLAYER_LORD_GODALMING] == 17) { //do you want me to get rid of magic no?
             locationNo[PLAYER_LORD_GODALMING] = 0;	
         } else {
             locationNo[PLAYER_LORD_GODALMING]++;
@@ -72,6 +72,8 @@ void decideHunterMove(HunterView gameState)
         int i = locationNo[PLAYER_MINA_HARKER];
         place = *areaFour[i];
     }
+    
+    char* move = &place
 
-    registerBestPlay(place,"I'm on holiday in Geneva");
+    registerBestPlay(move,"I'm on holiday in Geneva");
 }
