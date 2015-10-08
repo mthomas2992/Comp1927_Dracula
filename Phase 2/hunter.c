@@ -19,7 +19,7 @@ void decideHunterMove(HunterView gameState)
     5. Have hunters rest at ports (if possible) if blood points < 6(Dracula MAY less likely travel by sea [lose blood points])
     6.  need to implement what happens if in hospital
     */
-
+ 
     //Dublin and Galway visited twice
     char *areaOne[18]={"CA","GR","AL","BA","SR","SN","MA","LS","GW","DU","ED","MN","LO","SW","LV","PL","DU","GW"};
     //make anotherarray to keep track when drac trail is found to deviate??
