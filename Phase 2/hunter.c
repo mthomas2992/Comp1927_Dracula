@@ -21,17 +21,20 @@ void decideHunterMove(HunterView gameState)
     */
 
     //Dublin and Galway visited twice
-    /*const char *areaOne[18]={"CA","GR","AL","BA","SR","SN","MA","LS","GW","DU","ED","MN","LO","SW","LV","PL","DU","GW"};
+    char *areaOne[18]={"CA","GR","AL","BA","SR","SN","MA","LS","GW","DU","ED","MN","LO","SW","LV","PL","DU","GW"};
     //make anotherarray to keep track when drac trail is found to deviate??
-    const char *areaTwo[14]={"LE","NA","BR","PA","ST","NU","PR","BR","LI","FR","CO","HA","AM","BU"};
-    const char *areaThree[14]={"FL","RO","BI","NP","GO","CG","MR","TO","BO","CF","GE","ZU","MI","VE"};
-    const char *areaFour[16]={"AT","VA","SR","BE","SZ","ZA","VI","BD","KL","CD","GA","BC","CN","VR","SO","SA"};
+    char *areaTwo[14]={"LE","NA","BR","PA","ST","NU","PR","BR","LI","FR","CO","HA","AM","BU"};
+    char *areaThree[14]={"FL","RO","BI","NP","GO","CG","MR","TO","BO","CF","GE","ZU","MI","VE"};
+    char *areaFour[16]={"AT","VA","SR","BE","SZ","ZA","VI","BD","KL","CD","GA","BC","CN","VR","SO","SA"};
 
     //previously used mod round number to determine which city player should
     //visit, but player needs to rest so use array, keep track of city
-    int locationNo[NUM_PLAYERS-2] = {0};
-    char place;
-
+    
+    //char place; Oliver: movement is a string. also i think your array size is 
+    //too small. you want this instead:
+    int locationNo[NUM_PLAYERS] = {0}; //Oliver: too big > too small
+    char *move;
+    
     if (whoAmI(gameState) == PLAYER_LORD_GODALMING) {
 
         if (locationNo[PLAYER_LORD_GODALMING] == 17) { //do you want me to get rid of magic no?
@@ -40,7 +43,7 @@ void decideHunterMove(HunterView gameState)
             locationNo[PLAYER_LORD_GODALMING]++;
         }
         int i = locationNo[PLAYER_LORD_GODALMING];
-        place = *areaOne[i];
+        move = areaOne[i];
 
     } else if (whoAmI(gameState) == PLAYER_DR_SEWARD) {
 
@@ -50,7 +53,7 @@ void decideHunterMove(HunterView gameState)
             locationNo[PLAYER_DR_SEWARD]++;
         }
         int i = locationNo[PLAYER_DR_SEWARD];
-        place = *areaTwo[i];
+        move = areaTwo[i];
 
     } else if (whoAmI(gameState) == PLAYER_VAN_HELSING) {
 
@@ -60,7 +63,7 @@ void decideHunterMove(HunterView gameState)
             locationNo[PLAYER_VAN_HELSING]++;
         }
         int i = locationNo[PLAYER_VAN_HELSING];
-        place = *areaThree[i];
+        move = areaThree[i];
 
     } else {
 
@@ -70,10 +73,12 @@ void decideHunterMove(HunterView gameState)
             locationNo[PLAYER_MINA_HARKER]++;
         }
         int i = locationNo[PLAYER_MINA_HARKER];
-        place = *areaFour[i];
+        move = areaFour[i];
     }
+    
+    registerBestPlay(move,"I'm on holiday in Geneva");
 
-    char* move = &place*/
+    /*
     //Temporary random location code
     if (giveMeTheRound(gameState)==0){
 		registerBestPlay("BC","Matt is super cool");
@@ -84,5 +89,6 @@ void decideHunterMove(HunterView gameState)
       char*BestPlay;
       BestPlay=idToAbbrev(Possibles[1]);
       registerBestPlay(BestPlay,"I'm on holiday in Geneva, jk");
-   }
+    */
+      
 }
