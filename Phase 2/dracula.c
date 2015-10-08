@@ -48,10 +48,14 @@ void decideDraculaMove(DracView gameState)
 		LocationID *PossiblesID3;
 		int PossiblesID3Size=0;
 		printf("+++++++========CHARLIE========+++++++\n");
-		PossiblesID0=whereCanTheyGo(gameState,&PossiblesID0Size,0,1,1,1);
-		PossiblesID1=whereCanTheyGo(gameState,&PossiblesID1Size,1,1,1,1);
-		PossiblesID2=whereCanTheyGo(gameState,&PossiblesID2Size,2,1,1,1);
-		PossiblesID3=whereCanTheyGo(gameState,&PossiblesID3Size,3,1,1,1);
+		PossiblesID0=whereCanTheyGo(gameState,&PossiblesID0Size,0,1,0,0);
+		PossiblesID1=whereCanTheyGo(gameState,&PossiblesID1Size,1,1,0,0);
+		PossiblesID2=whereCanTheyGo(gameState,&PossiblesID2Size,2,1,0,0);
+		PossiblesID3=whereCanTheyGo(gameState,&PossiblesID3Size,3,1,0,0);
+		printf("Size of 0 %d\n",PossiblesID0Size);
+		printf("Size of 1 %d\n",PossiblesID1Size);
+		printf("Size of 2 %d\n",PossiblesID2Size);
+		printf("Size of 3 %d\n",PossiblesID3Size);
 		printf("+++++++========OMEGA========+++++++\n");
 
 		LocationID ID0Loc;
@@ -76,10 +80,6 @@ void decideDraculaMove(DracView gameState)
 
 		char*BestPlay;
 
-		PossiblesID0Size=2;
-		PossiblesID1Size=2;
-		PossiblesID2Size=2;
-		PossiblesID3Size=2;
 		for (i=0;i<RoadnumLocations;i++){
 			//if its possible that an encounter may occur
 			if (comparelocationarrays(roads[i],PossiblesID0,PossiblesID0Size)==0&&
