@@ -1,6 +1,25 @@
 // dracula.c
 // Implementation of your "Fury of Dracula" Dracula AI
 
+// Ash's comments
+// 1. Moving to the place hunters are doesn't gaurantee an encounter, may not even do anything useful as if they don't stay where they are, they probably won't be back
+// 2. I think the best way for Dracula to work is to make sure as best as possible that he NEVER encounters the hunters in a city, beacuse 10 BP loss is HUGE
+//	the best draculas so far are winning by having average rounds well over 140, 150, meaning game score is at least as low as 200
+// 3. We should try to add some behaviour based on blood points, get more conservative when we're low (maybe don't go to sea or something)
+// 4. Matt tells me going to CD is dangerous as you get trapped, perhaps a teleport followed by a double back? Maybe this is the only time we use double backs?
+// 5. Also suggest a slightly different strategy generally;
+/*	Make sure we're in a city without a rail connection on turns 0, 13, 26, etc, all the ones we will place a vampire
+	then for the following 5 or 6 turns start running around all over the place placing traps in adjacent cities
+	maybe try and get a few in the city itself
+	if the vampire dies, bail the hell out of there
+        start to travel somewhere else
+        if the hunters play well they'll chase the vampire and trigger the traps
+	if the hunters play poorly they won't cahse the vampire and we'll win faster
+
+*/
+
+
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -93,6 +112,5 @@ void decideDraculaMove(DracView gameState){
 				found=1;
 			}
 		}
- }
-	//registerBestPlay("FR","FirstMove");
+	}
 }
