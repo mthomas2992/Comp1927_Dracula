@@ -27,6 +27,7 @@ struct gameView {
 // Creates a new GameView to summarise the current state of the game
 GameView newGameView(char *pastPlays, PlayerMessage messages[])
 {
+  printf("called newGameView\n");
    GameView gameView = malloc(sizeof(struct gameView));
    // INITIALIZE ALL THE THINGS IN THE GAMEVIEW STRUCT
    gameView->RoundNum = 0;
@@ -83,6 +84,7 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
 // Frees all memory previously allocated for the GameView toBeDeleted
 void disposeGameView(GameView toBeDeleted)
 {
+  printf("called disposeGameView\n");
    removePlayer( toBeDeleted->Lord_Godalming );
    removePlayer( toBeDeleted->Dr_Seward );
    removePlayer( toBeDeleted->Van_Helsing );
@@ -99,24 +101,28 @@ void disposeGameView(GameView toBeDeleted)
 // Get the current round
 Round getRound(GameView currentView)
 {
+  printf("called getRound in gameview\n");
    return currentView->RoundNum;
 }
 
 // Get the id of current player - ie whose turn is it?
 PlayerID getCurrentPlayer(GameView currentView)
 {
+  printf("called getCurrentPlayer in gameview\n");
    return currentView->CurrentPlayer;
 }
 
 // Get the current score
 int getScore(GameView currentView)
 {
+  printf("called getScore in gameview\n");
    return currentView->GameScore;
 }
 
 // Get the current health points for a given player
 int getHealth(GameView currentView, PlayerID player)
 {
+  printf("called getHealth in gameview\n");
    switch(player) {
       case PLAYER_LORD_GODALMING: return getPlayerHealth(currentView->Lord_Godalming);
       case PLAYER_DR_SEWARD: 	    return getPlayerHealth(currentView->Dr_Seward);
@@ -130,7 +136,7 @@ int getHealth(GameView currentView, PlayerID player)
 // Get the current location id of a given player
 LocationID getLocation(GameView currentView, PlayerID player)
 {
-
+  printf("called getLocation in gameview\n");
    switch(player) {
       case 0: return getPlayerLocation(currentView->Lord_Godalming);
       case 1: return getPlayerLocation(currentView->Dr_Seward);
@@ -147,6 +153,7 @@ LocationID getLocation(GameView currentView, PlayerID player)
 void getHistory(GameView currentView, PlayerID player,
    LocationID trail[TRAIL_SIZE])
    {
+     printf("called getHistory in gameview\n");
       int i;
       for (i=0; i<TRAIL_SIZE; i++){
          if (player == 0) trail[i] = getPlayerHistory(currentView->Lord_Godalming, i);
@@ -167,6 +174,7 @@ void getHistory(GameView currentView, PlayerID player,
       LocationID from, PlayerID player, Round round,
       int road, int rail, int sea)
       {
+        printf("called connectedLocations in gameview\n");
          int i,n=0;
          int *locations = malloc(71*sizeof(int));
          int maxsteps = rail*((player+round) % 4);

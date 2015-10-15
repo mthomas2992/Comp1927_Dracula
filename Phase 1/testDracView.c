@@ -109,17 +109,49 @@ int main()
 
     printf("passed\n");
 
-    dv = newDracView("GGE.... SGE.... HGE.... MGE.... DED.V.. "
-                     "GST.... SST.... HST.... MST.... DMNT... "
-                     "GST.... SST.... HST.... MST....", messages3);
+    dv = newDracView( "GBC.... SBC.... HBC.... MBC.... DFR.V.."
+                      "GCN.... SCN.... HCN.... MBE.... DCOT..."
+                      "GGA.... SGA.... HBC.... MKL.... DAMT..."
+                      "GCD.... SBC.... HCN.... MBC.... DBUT..."
+                      "GGA.... SCN.... HGA.... MCN.... DLET..."
+                      "GCD.... SGA.... HCD.... MBC.... DNAT..."
+                      "GKL.... SCD.... HGA.... MCN.... DBOT.V."
+                      "GBC.... SGA.... HCD.... MGA.... DCFT.M."
+                      "GBE.... SCD.... HKL.... MCD....", messages3);
 
     //phase 2 experimenting
     LocationID *PossiblesID0;
     int PossiblesID0Size=0;
     printf("before\n");
+    LocationID myTrail[TRAIL_SIZE];
     PossiblesID0=whereCanTheyGo(dv,&PossiblesID0Size,0,1,1,1);
+    giveMeTheTrail(dv,PLAYER_DRACULA,myTrail);
     printf("after\n");
-    printf("possiblesid0[0] %d",PossiblesID0[0]);
+    printf("possiblesid0[0] %d\n",PossiblesID0[0]);
+
+    dv = newDracView( "GBC.... SBC.... HBC.... MBC.... DFR.V.."
+                    "GCN.... SCN.... HCN.... MBE.... DSTT..."
+                    "GGA.... SGA.... HBC.... MKL.... DZUT..."
+                    "GCD.... SBC.... HCN.... MBC.... DMUT..."
+                    "GGA.... SCN.... HGA.... MCN.... DZAT..."
+                    "GCD.... SGA.... HCD.... MBC.... DSJT..."
+                    "GKL.... SCD.... HGA.... MCN.... DVAT.V."
+                    "GBC.... SGA.... HCD.... MGA.... DIO..M."
+                    "GBE.... SCD.... HKL.... MCD.... DTS..M."
+                    "GKL.... SKL.... HBC.... MGA.... DMS..M."
+                    "GBC.... SBC.... HBE.... MCD.... DCGT.M."
+                    "GCN.... SBE.... HKL.... MKL....", messages3);
+
+    //phase 2 experimenting
+    LocationID *PossiblesID02;
+    int PossiblesID0Size2=0;
+    printf("before\n");
+    LocationID myTrail2[TRAIL_SIZE];
+    PossiblesID02=whereCanTheyGo(dv,&PossiblesID0Size2,0,1,1,1);
+    giveMeTheTrail(dv,PLAYER_DRACULA,myTrail2);
+    printf("after\n");
+    printf("possiblesid0[0] %d\n",PossiblesID02[0]);
+
 
     return 0;
 }

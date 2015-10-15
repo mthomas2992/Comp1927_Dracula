@@ -30,6 +30,7 @@ static void addConnections(Map);
 // #Vertices always same as NUM_PLACES
 Map newMap()
 {
+  //printf("called newMap\n");
    int i;
    Map g = malloc(sizeof(struct MapRep));
    assert(g != NULL);
@@ -45,6 +46,7 @@ Map newMap()
 // Remove an existing graph
 void disposeMap(Map g)
 {
+  //printf("called disposeMap\n");
    int i;
    VList curr;
    VList next;
@@ -64,6 +66,7 @@ void disposeMap(Map g)
 
 static VList insertVList(VList L, LocationID v, TransportID type)
 {
+  //printf("called insertVList in map\n");
    VList newV = malloc(sizeof(struct vNode));
    newV->v = v;
    newV->type = type;
@@ -73,6 +76,7 @@ static VList insertVList(VList L, LocationID v, TransportID type)
 
 static int inVList(VList L, LocationID v, TransportID type)
 {
+  //printf("called inVList in map\n");
 	VList cur;
 	for (cur = L; cur != NULL; cur = cur->next) {
 		if (cur->v == v && cur->type == type) return 1;
@@ -141,6 +145,7 @@ int numE(Map g, TransportID type)
 // Returns 0 if no direct connection (i.e. not adjacent in graph)
 int connections(Map g, LocationID start, LocationID end, int type)
 {
+  //printf("called connections in map\n");
    assert(g != NULL);
    assert(start >= 0 && start <=70);
    assert(end >= 0 && end <=70);
@@ -157,11 +162,11 @@ int connections(Map g, LocationID start, LocationID end, int type)
    return 0;
 }
 
-// Finds all the possible Rail Connections from a particular place 
+// Finds all the possible Rail Connections from a particular place
 // based on Round and Player
 int railConnections(Map g, LocationID start, int maxstep, LocationID locs[], int *numLocs)
 {
-
+  printf("called rail connections in map\n");
     if (maxstep == 0) return 0;
 
     int *checked = calloc(NUM_MAP_LOCATIONS, sizeof(int));
@@ -169,7 +174,7 @@ int railConnections(Map g, LocationID start, int maxstep, LocationID locs[], int
     int recentlyAdded = 0;
     int i;
     Stack checklist = newStack();
-    
+
     pushOnto(checklist,start);
 
     while(!emptyStack(checklist)) {
@@ -194,7 +199,7 @@ int railConnections(Map g, LocationID start, int maxstep, LocationID locs[], int
      }
 
 
-    return maxstep; 
+    return maxstep;
 }
 // Add edges to Graph representing map of Europe
 static void addConnections(Map g)

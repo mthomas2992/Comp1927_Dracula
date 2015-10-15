@@ -16,7 +16,7 @@ struct dracView {
    LocationID vampLoc;
    LocationID trapLocs[6];
    int trapNum;
-   
+
    GameView gameView;
 };
 
@@ -25,13 +25,12 @@ struct dracView {
 DracView newDracView(char *pastPlays, PlayerMessage messages[])
 {
    DracView dracView = malloc(sizeof(struct dracView));
-   char *pastplays = malloc(LONGEST_GAME);
+   char *pastplays = malloc(LONGEST_GAME); //modified
    strcpy(pastplays, pastPlays);
    dracView->vampLoc = -1;
    dracView->trapNum = 0;
    dracView->trapLocs[0] = -1;
    int i,j,k,found;
-
    //parse the pastPlays String to edit any Dracula Location and update trap/vamp locs
    for (i=0; pastPlays[i] != '\0'; i+=7) {
       if (pastPlays[i] == ' ') i++;
@@ -85,16 +84,22 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
             dracView->vampLoc = abbrevToID(&(pastplays[i+1]));
          }
          if (pastplays[i+5] == 'M'){
+           printf("entered if\n");
             for (k=1; k!= dracView->trapNum; k++) {
-               dracView->trapLocs[k-1] = dracView->trapLocs[k];
+              if (k<6){ //seg fault here
+                printf("K is %d\n",k);
+                dracView->trapLocs[k-1] = dracView->trapLocs[k];
+              }
             }
             dracView->trapNum--;
-         }
-         else if (pastplays[i+5] == 'V' || pastplays[i+6] == 'V') {
+            printf("after M\n");
+         } else if (pastplays[i+5] == 'V' || pastplays[i+6] == 'V') {
             dracView->vampLoc = -1;
          }
+         printf("after traps\n");
       }
    }
+   printf("end loop\n");
    dracView->gameView = newGameView(pastplays, messages);
    free(pastplays);
    return dracView;

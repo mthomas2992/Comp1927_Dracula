@@ -18,6 +18,7 @@ struct players{
 // initializes a player struct at the beginning of the game, depending on player ID
 Player initPlayer(PlayerID player)
 {
+  //printf("called initPlayer in player.c\n");
    Player Someone = malloc(sizeof(struct players));
    Someone->player = player;
    if (player >= 0 && player < 4) Someone->health = GAME_START_HUNTER_LIFE_POINTS;
@@ -30,6 +31,7 @@ Player initPlayer(PlayerID player)
 
 int doPlayerTurn(Player p, char* detail)
 {
+  //printf("called doPlayerTurn in player.c\n");
    int i;
    int scoreResult = 0;
    int locationModifier = 0;
@@ -78,22 +80,26 @@ int doPlayerTurn(Player p, char* detail)
 
 int getPlayerHealth(Player p)
 {
+  //printf("called getPlayerHealth in player.c\n");
    return p->health;
 }
 
 int getPlayerLocation(Player p)
 {
+  //printf("called getPlayerLocation in player\n");
    return p->Location;
 }
 
 int getPlayerHistory(Player p, int i)
 {
+  //printf("called getPlayerHistory in player\n");
    return p->Location_History[i];
 }
 
 void updatePlayerHistory(Player p)
 {
-   int i;
+  //printf("called updatePlayerHistory in player\n");
+   int i=5;
    for (i=5; i>0; i--) {
       p->Location_History[i] = p->Location_History[i-1];
    }
@@ -102,10 +108,12 @@ void updatePlayerHistory(Player p)
 }
 void removePlayer(Player p)
 {
+  //printf("called removePlayer in player\n");
    free(p);
 }
 
 void deductHealth(Player p, int deficit)
 {
+  //printf("called deductHealth in player\n");
    p->health -= deficit;
 }
