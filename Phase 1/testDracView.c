@@ -130,17 +130,7 @@ int main()
     printf("possiblesid0[0] %d\n",PossiblesID0[0]);
 
     dv = newDracView( "GBC.... SBC.... HBC.... MBC.... DFR.V.."
-                    "GCN.... SCN.... HCN.... MBE.... DSTT..."
-                    "GGA.... SGA.... HBC.... MKL.... DZUT..."
-                    "GCD.... SBC.... HCN.... MBC.... DMUT..."
-                    "GGA.... SCN.... HGA.... MCN.... DZAT..."
-                    "GCD.... SGA.... HCD.... MBC.... DSJT..."
-                    "GKL.... SCD.... HGA.... MCN.... DVAT.V."
-                    "GBC.... SGA.... HCD.... MGA.... DIO..M."
-                    "GBE.... SCD.... HKL.... MCD.... DTS..M."
-                    "GKL.... SKL.... HBC.... MGA.... DMS..M."
-                    "GBC.... SBC.... HBE.... MCD.... DCGT.M."
-                    "GCN.... SBE.... HKL.... MKL....", messages3);
+                   "GCN.... SCN.... HCN.... MBE....", messages3);
 
     //phase 2 experimenting
     LocationID *PossiblesID02;
