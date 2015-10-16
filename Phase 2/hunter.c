@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include "Game.h"
 #include "HunterView.h"
+#include <string.h>
 
 void decideHunterMove(HunterView gameState)
 {
@@ -21,19 +22,34 @@ void decideHunterMove(HunterView gameState)
     */
 
     //Dublin and Galway visited twice
-    /*const char *areaOne[18]={"CA","GR","AL","BA","SR","SN","MA","LS","GW","DU","ED","MN","LO","SW","LV","PL","DU","GW"};
     //make anotherarray to keep track when drac trail is found to deviate??
-    const char *areaTwo[14]={"LE","NA","BR","PA","ST","NU","PR","BR","LI","FR","CO","HA","AM","BU"};
-    const char *areaThree[14]={"FL","RO","BI","NP","GO","CG","MR","TO","BO","CF","GE","ZU","MI","VE"};
-    const char *areaFour[16]={"AT","VA","SR","BE","SZ","ZA","VI","BD","KL","CD","GA","BC","CN","VR","SO","SA"};
 
+    char* LocationMatrix[4][19]=
+    {
+        {"CA","GR","AL","BA","SR","SN","MA","LS","GW","DU","ED","MN","LO","SW","LV","PL","DU","GW","ZZ"},
+        {"LE","NA","BR","PA","ST","NU","PR","BR","LI","FR","CO","HA","AM","BU","ZZ","ZZ","ZZ","ZZ","ZZ"},
+        {"FL","RO","BI","NP","GO","CG","MR","TO","BO","CF","GE","ZU","MI","VE","ZZ","ZZ","ZZ","ZZ","ZZ"},
+        {"AT","VA","SR","BE","SZ","ZA","VI","BD","KL","CD","GA","BC","CN","VR","SO","SA","ZZ","ZZ","ZZ"}
+
+    };
+    int i=0;
+    int who = whoAmI(gameState);
+    int where = whereIs(gameState, who);
+    char *place;
+
+    while(idToAbbrev(where) != LocationMatrix[who][i] && !strcmp(LocationMatrix[who][i],"ZZ")) {
+	i++;
+    }
+    if (strcmp(LocationMatrix[who][i],"ZZ")) i=0;
+    place = LocationMatrix[who][i];
+    registerBestPlay(place, "Ash Enters the game");
+}
     //previously used mod round number to determine which city player should
     //visit, but player needs to rest so use array, keep track of city
-    int locationNo[NUM_PLAYERS-2] = {0};
+    /*int locationNo[NUM_PLAYERS-2] = {0};
     char place;
 
     if (whoAmI(gameState) == PLAYER_LORD_GODALMING) {
-
         if (locationNo[PLAYER_LORD_GODALMING] == 17) { //do you want me to get rid of magic no?
             locationNo[PLAYER_LORD_GODALMING] = 0;
         } else {
@@ -73,9 +89,10 @@ void decideHunterMove(HunterView gameState)
         place = *areaFour[i];
     }
 
-    char* move = &place*/
+    char* move = &place;
+*/
     //Temporary random location code
-    if (giveMeTheRound(gameState)==0){
+/*    if (giveMeTheRound(gameState)==0){
 		registerBestPlay("BC","Matt is super cool");
 	} else {
       LocationID *Possibles;
@@ -85,4 +102,4 @@ void decideHunterMove(HunterView gameState)
       BestPlay=idToAbbrev(Possibles[1]);
       registerBestPlay(BestPlay,"I'm on holiday in Geneva, jk");
    }
-}
+}*/
