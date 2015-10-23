@@ -92,17 +92,21 @@ void decideDraculaMove(DracView gameState){
 		} else if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"CO")==0){
 			registerBestPlay("BU","Not in Brussels at all");
 		} else if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"BU")==0){
-			registerBestPlay("PA","Pari is a horible city");
-		} else if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"PA")==0){
-			registerBestPlay("CF","This city has a weird name");
+			registerBestPlay("LE","LE is a horible city");
+		} else if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"LE")==0){
+			registerBestPlay("NA","This city has a weird name");
+		} else if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"NA")==0){
+			registerBestPlay("CF","Lake something");
 		} else if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"CF")==0){
-			registerBestPlay("GE","Lake something");
-		} else if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"GE")==0){
-			registerBestPlay("ZU","I couldn't read this city on the map");
-		} else if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"ZU")==0){
+			registerBestPlay("PA","I couldn't read this city on the map");
+		} else if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"PA")==0){
 			registerBestPlay("ST","Meat");
 		} else if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"ST")==0){
-			registerBestPlay("FR","flipping");
+			registerBestPlay("NU","flipping");
+		} else if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"NU")==0){
+			registerBestPlay("LI","flipping again");
+		} else if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"LI")==0){
+			registerBestPlay("FR","flipping again");
 		}
 	} else if (giveMeTheRound(gameState)==0) {
 		registerBestPlay("FR","FirstMove");
