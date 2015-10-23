@@ -23,4 +23,5 @@ int  numV(Map g);
 int  numE(Map g, TransportID t);
 int connections(Map g, LocationID start, LocationID end, int type);
 int railConnections(Map g, LocationID start, int maxstep, LocationID locs[], int *numLocs);
+LocationID shortestPath(Map g, LocationID start, LocationID end, Round round, PlayerID player);
 #endif

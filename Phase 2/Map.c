@@ -8,6 +8,7 @@
 #include "Map.h"
 #include "Places.h"
 #include "stack.h"
+#include "queue.h"
 #include "GameView.h"
 
 typedef struct vNode *VList;
@@ -166,7 +167,7 @@ int connections(Map g, LocationID start, LocationID end, int type)
 // based on Round and Player
 int railConnections(Map g, LocationID start, int maxstep, LocationID locs[], int *numLocs)
 {
-  printf("called rail connections in map\n");
+//  printf("called rail connections in map\n");
     if (maxstep == 0) return 0;
 
     int *checked = calloc(NUM_MAP_LOCATIONS, sizeof(int));
@@ -186,14 +187,17 @@ int railConnections(Map g, LocationID start, int maxstep, LocationID locs[], int
         for (curr = g->connections[start]; curr!=NULL; curr=curr->next) {
             if (curr->type == RAIL && !checked[curr->v]) {
                 pushOnto(checklist, curr->v);
+	//	printf("added %s\n", idToName(curr->v));
                 recentlyAdded++;
             }
          }
          steps++;
          if (steps > maxstep) {
              for(i=1; i<=recentlyAdded; i++) {
+	//	 printf("removed %s\n", idToName(popFrom(checklist)));
+	         popFrom(checklist);
              }
-             steps=0;
+             steps=1;
          }
          recentlyAdded=0;
      }
@@ -201,6 +205,95 @@ int railConnections(Map g, LocationID start, int maxstep, LocationID locs[], int
 
     return maxstep;
 }
+
+// Find the shortest path between 2 cities
+// returns the first city in the path
+LocationID shortestPath (Map g, LocationID start, LocationID end, Round round, PlayerID player)
+{
+//	printf("Called ShortestPath between %s and %s\nRound = %d\t Player = %d\n", idToName(start), idToName(end), round, player);
+
+	if (start == end) {
+		return start;
+	}
+	int done =0;
+	int tempstart=start;
+	int n=0;
+	int i;
+	int *checked = calloc(NUM_MAP_LOCATIONS, sizeof(int));
+	int *rail_locs = malloc(71*sizeof(int));
+	int railmoves = ((player+round)%4);
+	int railCheck;
+
+	Queue checklist = newQueue();
+
+
+
+//	printf("start = %d\n" , start);
+	checked[tempstart] = tempstart;
+	enterQueue(checklist, tempstart);
+	while(!emptyQueue(checklist)) {
+		VList curr;
+		tempstart = leaveQueue(checklist);
+		railCheck = tempstart;
+		if (railCheck != start) railmoves++;
+		while(checked[railCheck] != start) {
+			//printf("%s\n", idToName(railCheck));
+			railmoves=(railmoves+1)%4;
+			railCheck = checked[railCheck];
+		}
+//		printf("%d rail moves from %s possible this round\n", railmoves, idToName(tempstart));
+		railConnections(g, tempstart, railmoves, rail_locs, &n);
+//		printf("n=%d\n", n);
+		for (i=0; i<n; i++) {
+	//		printf("rail %s\n", idToName(rail_locs[i]));
+			if (rail_locs[i] == end){
+				if (tempstart==start) {
+//					printf("Towns adjacent rail, moving to %s\n", idToName(end));
+					return end;
+				}
+				done=1;
+				break;
+			} else if (!checked[rail_locs[i]]) {
+				enterQueue(checklist, rail_locs[i]);
+				checked[rail_locs[i]] = tempstart;
+			}
+		//	printf("i=%d\n", i);
+		}
+		if (done) break;
+		if (railCheck != start) railmoves--;
+//		printf("checking if directly connected to %s\n", idToName(start));
+		for (curr = g->connections[tempstart]; curr!=NULL; curr=curr->next) {
+			if (curr->v == end && curr->type != RAIL) {
+//				printf("Yes! Directly connected to %s\n", idToName(start));
+				if (tempstart==start) {
+//					printf("Towns adjacent, moving to %s\n", idToName(end));
+					return end;
+				}
+				done=1;
+				break;
+			}
+			else if (!checked[curr->v] && curr->type != RAIL) {
+				enterQueue(checklist, curr->v);
+				checked[curr->v] = tempstart;
+//				printf("added %s to be checked\n", idToName(curr->v));
+			}
+		}
+	if (done) break;
+	n=0;
+	for (i=0; i<=71; i++ ) rail_locs[i] = -1;
+//	printf("Not in %s, moving on\n", idToName(start));
+	}
+//	printf("Move List\n%s\n%s\n", idToName(end), idToName(tempstart));
+	while(checked[tempstart]!=start) {
+	//	printf("%d\n", checked[tempstart]);
+	//	printf("%s\n", idToName(checked[tempstart]));
+		tempstart = checked[tempstart];
+	}
+//	printf("First Move is %s\n", idToName(tempstart));
+	return tempstart;
+}
+
+
 // Add edges to Graph representing map of Europe
 static void addConnections(Map g)
 {
