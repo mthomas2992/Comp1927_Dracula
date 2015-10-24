@@ -201,8 +201,8 @@ int railConnections(Map g, LocationID start, int maxstep, LocationID locs[], int
          }
          recentlyAdded=0;
      }
-
-
+    disposeStack(checklist);
+    free(checked);
     return maxstep;
 }
 

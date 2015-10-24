@@ -88,6 +88,12 @@ void decideDraculaMove(DracView gameState){
 			currentmovescore=0;
 		}
 		registerBestPlay(BestPlay,"MATT IS AMAZING");
+		free(PossiblesID0);
+		free(PossiblesID1);
+		free(PossiblesID2);
+		free(PossiblesID3);
+		free(options);
+		//free(myTrail);
 		//registerBestPlay(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)+1),"Moving up");
 		/*if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"FR")==0){
 			registerBestPlay("CO","Tots not in cologne");
