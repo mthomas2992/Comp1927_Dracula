@@ -18,20 +18,10 @@ void decideHunterMove(HunterView gameState)
     lower-half; Mina Harker takes rightmost region
     */
 
-    //Dublin and Galway visited twice
-    //make anotherarray to keep track when drac trail is found to deviate??
-    // original location matrix
-   /* char* LocationMatrix[4][20]=
-    {
-        {"CA","GR","AL","BA","SR","SN","MA","LS","AO","GW","DU","ED","MN","LO","SW","LV","PL","DU","GW","ZZ"},
-        {"LE","NA","BO","PA","ST","NU","PR","BR","LI","FR","CO","HA","AM","BU","ZZ","ZZ","ZZ","ZZ","ZZ"},
-        {"FL","RO","BI","NP","GO","CG","MR","TO","BO","CF","GE","ZU","MI","VE","ZZ","ZZ","ZZ","ZZ","ZZ"},
-        {"AT","VA","SR","BE","SZ","ZA","VI","BD","KL","CD","GA","BC","CN","VR","SO","SA","ZZ","ZZ","ZZ"}
-
-    };*/
     // the real slim shady starts here
 
-
+	// Round 0: start positions
+	
     char *LocationMatrix[4][18]=
     {
 	{"GW","AO","LS","SN","SR","BO","NA","LE","EC","NS","ED","MN","LO","SW","LV","IR","DU","ZZ"},
@@ -39,34 +29,112 @@ void decideHunterMove(HunterView gameState)
 	{"AT","VA","SA","SO","VR","CN","BC","GA","CD","KL","BD","VI","ZA","SZ","BE","SJ","VA","ZZ"},
 	{"MI","VE","MU","NU","PR","BR","HA","LI","FR","CO","AM","BU","ST","PA","CF","GE","ZU","ZZ"},
     };
-    int i=0;
-    int who = whoAmI(gameState);
-    int where = whereIs(gameState, who);
-    char *place;
-    Map europe = newMap();
-
-
+    PlayerID who = whoAmI(gameState);
+    LocationID where = whereIs(gameState, who);
 	if (where == -1) {
 		registerBestPlay(LocationMatrix[who][0], "I am here, click me!"); 
-		disposeMap(europe);
 		return;
 	}
 
 	printf("I AM %d\n", who);
 	printf("I AM IN %s\n", idToAbbrev(where));
+//--------------------------------------------REST LOW HEALTH ----------------------------------------------
+	// if we can't win in 1 move
+	if (howHealthyIs(gameState, 4) >= 10) {
+		if (howHealthyIs(gameState, who) <= 3) {
+			registerBestPlay(idToAbbrev(where), "Heal me!, Quickly!");
+			return;
+		}
+	}
 
+//----------------------------------------- RESPONSE TO DRACULA --------------------------------------------
+	
+	Round round = giveMeTheRound(gameState);
+    Map europe = newMap();
+    int i=0, j=0;
+	int min;
+	int job;
+    char *place;
+	int nums[4];
+	LocationID *whitelist;
+	int wsize=0;
+	LocationID trail[TRAIL_SIZE];
+	
+	giveMeTheTrail(gameState, 4, trail);
+	if (trail[0] < NUM_MAP_LOCATIONS && trail[0] >= 0) {
+		if (where == trail[0]) {
+			// we know where Drac was LAST turn AND we are the hunter who found him
+			registerBestPlay(idToAbbrev(where), "Patience is everything");
+			disposeMap(europe);
+			return;
+		}
+		// we know where Drac was LAST turn. go to the closest connecting city as quick as possible
+		whitelist = whereCanTheyGo(gameState, &wsize, 4, 1,0,0);
+		int distances[wsize];
+		int min=70;
+		int dest_id;
+		for (i=0;i<wsize;i++) {
+			distances[i] = howManyMoves(europe,where,whitelist[i], round, who);
+			if (distances[i] < min) {
+				dest_id = whitelist[i];
+				min = distances[i];
+			}
+		}
+		place = idToAbbrev(shortestPath(europe,where,dest_id,round,who));
+		registerBestPlay(place, "Target in my sights");
+		disposeMap(europe);
+		return;
+	}
+	int trailsize = (round <= 6) ? round : TRAIL_SIZE;
+	for (i=0; i<trailsize; i++) {
+		if (trail[i] < NUM_MAP_LOCATIONS && trail[0] >= 0) {
+			// we know where drac was, go to any place we don't know he has been
+			// search for vamps: find out who is closest, if we are, then go! otherwise do something else
+			if ((round - i)%13 == 0) {
+				min = 70;
+				for (j=0;j<=3;j++) {
+					nums[j] = howManyMoves(europe,whereIs(gameState,j),trail[i],round,j);
+				}
+				for (j=0;j<=3;j++) {
+					if (nums[j] < min) min = j;
+					nums[j] = -1;
+				}
+				job = min;
+				if (job==who) {
+					place=idToAbbrev(shortestPath(europe,where,trail[i],round,who));
+					registerBestPlay(place, "Eatin' Steak Tonight!");
+					disposeMap(europe);
+					return;
+				}
+			}
+			// otherwise if we know where drac has been we can head towards there and try to reveal more
+			place = idToAbbrev(shortestPath(europe,where,trail[i],round,who));
+			registerBestPlay(place, "The Chase is on");
+			disposeMap(europe);
+			return;
+		}		
+	}			
+
+
+//----------------------------------------------- PATROL ---------------------------------------------------
+	i=0;
+
+
+	// find current loc in matrix and prepare to move to next
     while(strcmp(idToAbbrev(where), LocationMatrix[who][i])!=0 
 						&& strcmp(LocationMatrix[who][i],"ZZ")!=0) {
 	i++;
-	printf("%d\n", i);
+//	printf("%d\n", i);
     }
+	// reset loop if at end
     if (i == 16) {
 		i=0;
 		place = LocationMatrix[who][i];
 		registerBestPlay(place, "Restarting!");
+	// get back to loop if not at loop
 	} else if (i == 17) {
 		place = idToAbbrev(shortestPath(europe, where, abbrevToID(LocationMatrix[who][0]), 
-										giveMeTheRound(gameState), who));
+										round, who));
 		registerBestPlay(place, "Get me back into the fight!");
 	} else {
 		i++;
@@ -88,3 +156,4 @@ void decideHunterMove(HunterView gameState)
       registerBestPlay(BestPlay,"I'm on holiday in Geneva, jk");
    }
 }*/
+

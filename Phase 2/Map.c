@@ -315,6 +315,14 @@ LocationID shortestPath (Map g, LocationID start, LocationID end, Round round, P
 	return tempstart;
 }
 
+//Find how many moves it will take to get from A to B
+
+int howManyMoves(Map g, LocationID start, LocationID end, Round round, PlayerID player)
+{
+	LocationID move = shortestPath(g,start,end,round,player);
+	if (move==start)   return 0;
+	return 1+howManyMoves(g,move,end,round+1,player);
+}
 
 // Add edges to Graph representing map of Europe
 static void addConnections(Map g)
