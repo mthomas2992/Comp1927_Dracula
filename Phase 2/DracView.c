@@ -35,6 +35,11 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
 
    //parse the pastPlays String to edit any Dracula Location and update trap/vamp locs
    for (i=0; pastPlays[i] != '\0'; i+=7) {
+      printf("pastplays[%d]\n",i);
+      if (i>LONGEST_GAME){
+         printf("Longest\n");
+         break;
+      }
       if (pastPlays[i] == ' ') i++;
       if (pastPlays[i] != 'D' && pastPlays[i+3] != '.') {
          //handle hunters encountering traps or vampire
