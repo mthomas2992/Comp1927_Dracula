@@ -28,7 +28,9 @@ struct gameView {
 GameView newGameView(char *pastPlays, PlayerMessage messages[])
 {
   printf("called newGameView\n");
+  printf("checking\n");
    GameView gameView = malloc(sizeof(struct gameView));
+   printf("after malloc which wouldn't make sense\n");
    // INITIALIZE ALL THE THINGS IN THE GAMEVIEW STRUCT
    gameView->RoundNum = 0;
    gameView->CurrentPlayer = 0;
@@ -85,6 +87,12 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
 void disposeGameView(GameView toBeDeleted)
 {
   printf("called disposeGameView\n");
+   /*free(toBeDeleted->Lord_Godalming);
+   free(toBeDeleted->Dr_Seward);
+   free(toBeDeleted->Van_Helsing);
+   free(toBeDeleted->Mina_Harker);
+   free(toBeDeleted->Dracula);
+   free(toBeDeleted->europe);*/
    removePlayer( toBeDeleted->Lord_Godalming );
    removePlayer( toBeDeleted->Dr_Seward );
    removePlayer( toBeDeleted->Van_Helsing );

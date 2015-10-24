@@ -290,6 +290,8 @@ LocationID shortestPath (Map g, LocationID start, LocationID end, Round round, P
 		tempstart = checked[tempstart];
 	}
 //	printf("First Move is %s\n", idToName(tempstart));
+   free(checked);
+   free(rail_locs);
 	return tempstart;
 }
 
