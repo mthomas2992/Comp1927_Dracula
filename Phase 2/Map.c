@@ -169,37 +169,49 @@ int railConnections(Map g, LocationID start, int maxstep, LocationID locs[], int
 {
 //  printf("called rail connections in map\n");
     if (maxstep == 0) return 0;
-
-    int *checked = calloc(NUM_MAP_LOCATIONS, sizeof(int));
+    int *checked = malloc(NUM_MAP_LOCATIONS*sizeof(int));
+	int i;
+	for (i=0; i<NUM_MAP_LOCATIONS; i++) checked[i]=-1;
     int steps = 0;
-    int recentlyAdded = 0;
-    int i;
+	int tempstart=start;
+	int temp;
+
     Stack checklist = newStack();
 
+	checked[start] = start;
     pushOnto(checklist,start);
 
     while(!emptyStack(checklist)) {
+		steps=0;
         VList curr;
-        start = popFrom(checklist);
-        if (checked[start]) continue;
-        checked[start] = 1;
-        locs[(*numLocs)++] = start;
-        for (curr = g->connections[start]; curr!=NULL; curr=curr->next) {
-            if (curr->type == RAIL && !checked[curr->v]) {
-                pushOnto(checklist, curr->v);
-	//	printf("added %s\n", idToName(curr->v));
-                recentlyAdded++;
-            }
-         }
-         steps++;
+        tempstart = popFrom(checklist);
+		temp=tempstart;
+		if (temp!=start) steps++;
+		while (checked[temp]!=start) {
+			temp=checked[temp];
+			steps++;
+		}
+		if (steps > maxstep) {
+			steps--;
+			continue;
+		}
+
+        locs[(*numLocs)++] = tempstart;
+        for (curr = g->connections[tempstart]; curr!=NULL; curr=curr->next) {
+            if (curr->type == RAIL && checked[curr->v]==-1) {
+				checked[curr->v] = tempstart;
+		        pushOnto(checklist, curr->v);
+			}
+		}
+    /*     steps++;
+		 printf("steps = %d\n", steps);
          if (steps > maxstep) {
              for(i=1; i<=recentlyAdded; i++) {
-	//	 printf("removed %s\n", idToName(popFrom(checklist)));
-	         popFrom(checklist);
+				 printf("removed %s\n", idToName(popFrom(checklist)));
+	        //   popFrom(checklist);
              }
-             steps=1;
-         }
-         recentlyAdded=0;
+         }*/
+ //        recentlyAdded=0;
      }
     disposeStack(checklist);
     free(checked);
@@ -219,7 +231,8 @@ LocationID shortestPath (Map g, LocationID start, LocationID end, Round round, P
 	int tempstart=start;
 	int n=0;
 	int i;
-	int *checked = calloc(NUM_MAP_LOCATIONS, sizeof(int));
+	int *checked = malloc(NUM_MAP_LOCATIONS*sizeof(int));
+	for (i=0;i<NUM_MAP_LOCATIONS; i++) checked[i]=-1;
 	int *rail_locs = malloc(71*sizeof(int));
 	int railmoves = ((player+round)%4);
 	int railCheck;
@@ -237,15 +250,15 @@ LocationID shortestPath (Map g, LocationID start, LocationID end, Round round, P
 		railCheck = tempstart;
 		if (railCheck != start) railmoves++;
 		while(checked[railCheck] != start) {
-			//printf("%s\n", idToName(railCheck));
+//			printf("%s\n", idToName(railCheck));
 			railmoves=(railmoves+1)%4;
 			railCheck = checked[railCheck];
 		}
 //		printf("%d rail moves from %s possible this round\n", railmoves, idToName(tempstart));
-		railConnections(g, tempstart, railmoves, rail_locs, &n);
+		railConnections(g, tempstart, railmoves%4, rail_locs, &n);
 //		printf("n=%d\n", n);
 		for (i=0; i<n; i++) {
-	//		printf("rail %s\n", idToName(rail_locs[i]));
+//			printf("rail %s\n", idToName(rail_locs[i]));
 			if (rail_locs[i] == end){
 				if (tempstart==start) {
 //					printf("Towns adjacent rail, moving to %s\n", idToName(end));
@@ -256,11 +269,11 @@ LocationID shortestPath (Map g, LocationID start, LocationID end, Round round, P
 				}
 				done=1;
 				break;
-			} else if (!checked[rail_locs[i]]) {
+			} else if (checked[rail_locs[i]]==-1) {
 				enterQueue(checklist, rail_locs[i]);
 				checked[rail_locs[i]] = tempstart;
 			}
-		//	printf("i=%d\n", i);
+//			printf("i=%d\n", i);
 		}
 		if (done) break;
 		if (railCheck != start) railmoves--;
@@ -278,7 +291,7 @@ LocationID shortestPath (Map g, LocationID start, LocationID end, Round round, P
 				done=1;
 				break;
 			}
-			else if (!checked[curr->v] && curr->type != RAIL) {
+			else if (checked[curr->v]==-1 && curr->type != RAIL) {
 				enterQueue(checklist, curr->v);
 				checked[curr->v] = tempstart;
 //				printf("added %s to be checked\n", idToName(curr->v));
@@ -286,13 +299,13 @@ LocationID shortestPath (Map g, LocationID start, LocationID end, Round round, P
 		}
 	if (done) break;
 	n=0;
-	for (i=0; i<71; i++ ) rail_locs[i] = -1;
+	for (i=0; i<NUM_MAP_LOCATIONS; i++ ) rail_locs[i] = -1;
 //	printf("Not in %s, moving on\n", idToName(start));
 	}
 //	printf("Move List\n%s\n%s\n", idToName(end), idToName(tempstart));
 	while(checked[tempstart]!=start) {
-	//	printf("%d\n", checked[tempstart]);
-	//	printf("%s\n", idToName(checked[tempstart]));
+//		printf("%d\n", checked[tempstart]);
+//		printf("%s\n", idToName(checked[tempstart]));
 		tempstart = checked[tempstart];
 	}
 //	printf("First Move is %s\n", idToName(tempstart));

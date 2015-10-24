@@ -35,8 +35,8 @@ void decideHunterMove(HunterView gameState)
     char *LocationMatrix[4][18]=
     {
 	{"GW","AO","LS","SN","SR","BO","NA","LE","EC","NS","ED","MN","LO","SW","LV","IR","DU","ZZ"},
-	{"NP","TS","CG","MS","AO","CA","MA","GR","AL","BA","TO","MR","GO","FL","RO","NP","BI","ZZ"},
-	{"AT","VA","SA","SO","VR","CN","GA","CD","KL","BD","VI","ZA","SZ","BC","BE","SJ","VA","ZZ"},
+	{"NP","TS","CG","MS","AO","CA","MA","GR","AL","SR","TO","MR","GO","FL","RO","NP","BI","ZZ"},
+	{"AT","VA","SA","SO","VR","CN","BC","GA","CD","KL","BD","VI","ZA","SZ","BE","SJ","VA","ZZ"},
 	{"MI","VE","MU","NU","PR","BR","HA","LI","FR","CO","AM","BU","ST","PA","CF","GE","ZU","ZZ"},
     };
     int i=0;
