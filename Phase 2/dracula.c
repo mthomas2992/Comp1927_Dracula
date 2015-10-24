@@ -29,7 +29,7 @@
 #define DEGREE_1_IMPOS 10
 
 int comparelocationarrays(int ID,LocationID array[], int arraysize){
-	printf("compare called\n");
+	//printf("compare called\n");
 	int index=0;
 	for (index=0;index<arraysize;index++){
 		if (array[index]==ID){
@@ -79,12 +79,12 @@ void decideDraculaMove(DracView gameState){
 			}
 			//printf("still looping\n");
 			if (comparelocationarrays(options[i],myTrail,trailsize)==1){
-				printf("comparing trails\n");
+				//printf("comparing trails\n");
 				currentmovescore=-1;
 			}
-			printf("prior to if\n");
+			//printf("prior to if\n");
 			if (currentmovescore>bestmovescore&&strcmp(idToAbbrev(options[i]),"JM")!=0){
-				printf("options selected is %d\n",options[i]);
+				//printf("options selected is %d\n",options[i]);
 				BestPlay=idToAbbrev(options[i]);
 				bestmovescore=currentmovescore;
 			}

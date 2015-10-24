@@ -35,7 +35,6 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
 
    //parse the pastPlays String to edit any Dracula Location and update trap/vamp locs
    for (i=0; pastPlays[i] != '\0'; i+=7) {
-      printf("pastplays[%d]\n",i);
       if (i>LONGEST_GAME){
          printf("Longest\n");
          break;
@@ -84,19 +83,21 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
             pastplays[i+2] = 'D';
          }
          // handle Dracula placing traps/vampires, traps expiring and vampires maturing
+         if (pastplays[i+5] == 'M'){
+            for (k=1; k!= dracView->trapNum; k++) { //changed this to greater then 6
+              if (k<6){
+                dracView->trapLocs[k-1] = dracView->trapLocs[k];
+             } else {
+                break;
+             }
+            }
+            dracView->trapNum--;
+         }
          if (pastplays[i+3] == 'T') {
             dracView->trapLocs[dracView->trapNum++] = abbrevToID(&(pastplays[i+1]));
          }
          if (pastplays[i+4] == 'V') {
             dracView->vampLoc = abbrevToID(&(pastplays[i+1]));
-         }
-         if (pastplays[i+5] == 'M'){
-            for (k=1; k!= dracView->trapNum; k++) {
-              if (k<6){
-                dracView->trapLocs[k-1] = dracView->trapLocs[k];
-              }
-            }
-            dracView->trapNum--;
          }
          else if (pastplays[i+5] == 'V' || pastplays[i+6] == 'V') {
             dracView->vampLoc = -1;
