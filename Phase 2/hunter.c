@@ -40,8 +40,8 @@ void decideHunterMove(HunterView gameState)
     char *LocationMatrix[4][18]=
     {
 	{"GW","AO","LS","SN","SR","BO","NA","LE","EC","NS","ED","MN","LO","SW","LV","IR","DU","ZZ"},
-	{"CA","MA","GR","AL","BA","TO","MR","GO","FL","RO","NP","BI","NP","TS","CG","MS","AO","ZZ"},
-	{"VA","AT","VA","SA","SO","VR","CN","GA","CD","KL","BD","VI","ZA","SZ","BC","BE","SJ","ZZ"},
+	{"NP","TS","CG","MS","AO","CA","MA","GR","AL","BA","TO","MR","GO","FL","RO","NP","BI","ZZ"},
+	{"AT","VA","SA","SO","VR","CN","GA","CD","KL","BD","VI","ZA","SZ","BC","BE","SJ","VA","ZZ"},
 	{"MI","VE","MU","NU","PR","BR","HA","LI","FR","CO","AM","BU","ST","PA","CF","GE","ZU","ZZ"},
     };
     int i=0;
@@ -53,6 +53,7 @@ void decideHunterMove(HunterView gameState)
 
 	if (where == -1) {
 		registerBestPlay(LocationMatrix[who][0], "I am here, click me!"); 
+		return;
 	}
 
 	printf("I AM %d\n", who);
@@ -63,14 +64,16 @@ void decideHunterMove(HunterView gameState)
 	i++;
 	printf("%d\n", i);
     }
-    if (i == 17) {
+    if (i == 16) {
 		i=0;
 		place = LocationMatrix[who][i];
-	} else if (i == 18) {
+		registerBestPlay(place, "Restarting!");
+	} else if (i == 17) {
 		place = idToAbbrev(shortestPath(europe, where, abbrevToID(LocationMatrix[who][0]), 
 										giveMeTheRound(gameState), who));
 		registerBestPlay(place, "Get me back into the fight!");
 	} else {
+		i++;
 		place = LocationMatrix[who][i];
 		registerBestPlay(place, "he'll never hear me comin'");
 	}
