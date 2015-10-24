@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include "Game.h"
 #include "HunterView.h"
+#include "Map.h"
+#include "Places.h"
 #include <string.h>
 
 void decideHunterMove(HunterView gameState)
@@ -23,7 +25,7 @@ void decideHunterMove(HunterView gameState)
 
     //Dublin and Galway visited twice
     //make anotherarray to keep track when drac trail is found to deviate??
-
+    // original location matrix
    /* char* LocationMatrix[4][20]=
     {
         {"CA","GR","AL","BA","SR","SN","MA","LS","AO","GW","DU","ED","MN","LO","SW","LV","PL","DU","GW","ZZ"},
@@ -32,8 +34,10 @@ void decideHunterMove(HunterView gameState)
         {"AT","VA","SR","BE","SZ","ZA","VI","BD","KL","CD","GA","BC","CN","VR","SO","SA","ZZ","ZZ","ZZ"}
 
     };*/
+    // the real slim shady starts here
 
-/*    char *LocationMatrix[4][18]=
+
+    char *LocationMatrix[4][18]=
     {
 	{"GW","AO","LS","SN","SR","BO","NA","LE","EC","NS","ED","MN","LO","SW","LV","IR","DU","ZZ"},
 	{"CA","MA","GR","AL","BA","TO","MR","GO","FL","RO","NP","BI","NP","TS","CG","MS","AO","ZZ"},
@@ -44,19 +48,33 @@ void decideHunterMove(HunterView gameState)
     int who = whoAmI(gameState);
     int where = whereIs(gameState, who);
     char *place;
-    if (where == -1) where = 0;
+    Map europe = newMap();
+
+
+	if (where == -1) {
+		registerBestPlay(LocationMatrix[who][0], "I am here, click me!"); 
+	}
 
 	printf("I AM %d\n", who);
 	printf("I AM IN %s\n", idToAbbrev(where));
 
-    while(strcmp(idToAbbrev(where), LocationMatrix[who][i])!=0 && strcmp(LocationMatrix[who][i],"ZZ")!=0) {
+    while(strcmp(idToAbbrev(where), LocationMatrix[who][i])!=0 
+						&& strcmp(LocationMatrix[who][i],"ZZ")!=0) {
 	i++;
 	printf("%d\n", i);
     }
-    if (!strcmp(LocationMatrix[who][i],"ZZ") || !strcmp(LocationMatrix[who][i+1],"ZZ")) i=-1;
-    place = LocationMatrix[who][i+1];
-    registerBestPlay(place, "Ash Enters the game");
-}*/
+    if (i == 17) {
+		i=0;
+		place = LocationMatrix[who][i];
+	} else if (i == 18) {
+		place = idToAbbrev(shortestPath(europe, where, abbrevToID(LocationMatrix[who][0]), 
+										giveMeTheRound(gameState), who));
+		registerBestPlay(place, "Get me back into the fight!");
+	} else {
+		place = LocationMatrix[who][i];
+		registerBestPlay(place, "he'll never hear me comin'");
+	}
+}
     //previously used mod round number to determine which city player should
     //visit, but player needs to rest so use array, keep track of city
     /*int locationNo[NUM_PLAYERS-2] = {0};
@@ -105,7 +123,7 @@ void decideHunterMove(HunterView gameState)
     char* move = &place;
 */
     //Temporary random location code
-    if (giveMeTheRound(gameState)==0){
+/*    if (giveMeTheRound(gameState)==0){
 		registerBestPlay("BC","Matt is super cool");
 	} else {
       LocationID *Possibles;
@@ -115,4 +133,4 @@ void decideHunterMove(HunterView gameState)
       BestPlay=idToAbbrev(Possibles[1]);
       registerBestPlay(BestPlay,"I'm on holiday in Geneva, jk");
    }
-}
+}*/
