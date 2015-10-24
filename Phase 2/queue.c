@@ -54,6 +54,7 @@ void disposeQueue(Queue q)
 		disposeNode(curr);	
 		curr = next;
 	}
+	free(q);
 }
 
 // enterQueue(Queue,Str)

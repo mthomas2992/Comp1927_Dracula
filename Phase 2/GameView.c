@@ -37,10 +37,10 @@ GameView newGameView(char *pastPlays, PlayerMessage messages[])
    gameView->GameScore = GAME_START_SCORE;
    gameView->europe = newMap();
 
-   gameView->Lord_Godalming = initPlayer(PLAYER_LORD_GODALMING);
+   gameView->Lord_Godalming  = initPlayer(PLAYER_LORD_GODALMING);
    gameView->Dr_Seward	     = initPlayer(PLAYER_DR_SEWARD);
-   gameView->Van_Helsing    = initPlayer(PLAYER_VAN_HELSING);
-   gameView->Mina_Harker    = initPlayer(PLAYER_MINA_HARKER);
+   gameView->Van_Helsing     = initPlayer(PLAYER_VAN_HELSING);
+   gameView->Mina_Harker     = initPlayer(PLAYER_MINA_HARKER);
    gameView->Dracula	     = initPlayer(PLAYER_DRACULA);
 
    int i;
@@ -163,7 +163,9 @@ void getHistory(GameView currentView, PlayerID player,
    {
      printf("called getHistory in gameview\n");
       int i;
-      for (i=0; i<TRAIL_SIZE; i++){
+	  int size = TRAIL_SIZE;
+	  if (currentView->RoundNum < TRAIL_SIZE) size = currentView->RoundNum; 
+      for (i=0; i<size; i++){
          if (player == 0) trail[i] = getPlayerHistory(currentView->Lord_Godalming, i);
          else if (player == 1) trail[i] = getPlayerHistory(currentView->Dr_Seward, i);
          else if (player == 2) trail[i] = getPlayerHistory(currentView->Van_Helsing, i);

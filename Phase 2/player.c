@@ -49,13 +49,13 @@ int main(int argc, char *argv[])
    DracView gameState;
    char *plays = "GBC.... SBC.... HBC.... MBC.... DFR.V.."
                   "GCN.... SCN.... HCN.... MBE....";
-   PlayerMessage msgs[3] = { "", "", "" };
+   PlayerMessage msgs[9] = { "", "", "","","","","","","" };
    gameState = newDracView(plays,msgs);
    decideDraculaMove(gameState);
    disposeDracView(gameState);
 #else
    HunterView gameState;
-   char *plays = "GZA.... SED.... HZU....";
+	char *plays = "GGW.... SNP.... HAT.... MMI.... DC?.V.. GAO.... STS.... HVA.... MVE.... DC?T... GLS.... SCG.... HSA.... MMU.... DC?T... GSN.... SMS.... HSO.... MNU.... DC?T... GSR.... SAO.... HVR.... MPR.... DMRT... GBO.... SCA.... HCN.... MBR.... DS?.... GNA.... SMA.... HGA.... MHA.... DD2T.V. GLE.... SGR.... HCD.... MLI.... DGOT.M. GEC.... SAL.... HKL.... MFR.... DHIT.M. GNS.... SBA.... HBD.... MCO.... DC?T.M. GED.... STO.... HVI.... MAM.... DMRT.M. GMN.... SMRTTD. HZA.... MBU.... DZUT... GLO.... SGOT... HSZ.... MST.... DD1T... GSW.... SJM.... HBC.... MPA.... DC?.V.. GLV.... SJM.... HBE.... MCF.... DC?T.M. GIR.... SJM.... HSJ.... MGE.... DC?T.M. GDU.... SJM.... HVA.... MZUTT.. DC?T... GGW.... SJM.... HSA.... MMI.... DC?T... GAO.... SJM.... HSO.... MVE.... DD1T... GLS.... SJM.... HVR.... MMU.... DC?T.V. GSN.... SJM.... HCN.... MNU.... DHIT.M. GSR.... SJM.... HGA.... MPR.... DC?T.M. GBO.... SJM.... HCD.... MBR.... DC?T.M. GNA.... SJM.... HKL.... MHA.... DC?T.M. GLE.... SJM.... HBD.... MLI.... DC?T.M. GEC.... SJM.... HVI.... MFR.... DC?T.M. GNS.... SJM.... HZA.... MCO.... DD4.VM. GED.... SJM.... HSZ.... MAM.... DVET.M. GMN.... SJM.... HBC.... MBU.... DHIT.M. GLO.... SJM.... HBE.... MST.... DMIT.M. GSW.... SJM.... HSJ.... MPA.... DC?T.M. GLV.... SJM.... HVA.... MCF.... DC?T.M. GIR.... SJM.... HSA.... MGE.... DD5T.V. GDU.... SJM.... HSO.... MZU.... DMUT.M. GGW.... SJM.... HVR.... MMIT... DC?T.M. GAO.... SJM.... HCN.... MVET... DC?T... GLS.... SJM.... HGA.... MMUT... DC?T.M. GSN.... SJM.... HCD....";
    PlayerMessage msgs[3] = { "", "", "" };
    gameState = newHunterView(plays,msgs);
    decideHunterMove(gameState);

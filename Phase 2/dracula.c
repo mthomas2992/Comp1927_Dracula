@@ -43,7 +43,8 @@ int comparelocationarrays(int ID,LocationID array[], int arraysize){
 void decideDraculaMove(DracView gameState){
 	printf("called\n");
 	//printf("DSJDSADNSADNAUNIUNEIUFNEIUFNSIUFNSDIFUNDSUIFNSIDFUNDSIFUNS\n\n\n\n\n\n\n");
-	if (giveMeTheRound(gameState)>0){
+	int round = giveMeTheRound(gameState);
+	if (round>0){
 		int optionssisze=0;
 		LocationID *options = whereCanIgo(gameState,&optionssisze,1,1); //find all possible moves
 
@@ -63,6 +64,7 @@ void decideDraculaMove(DracView gameState){
 
 		LocationID myTrail[TRAIL_SIZE];
 		giveMeTheTrail(gameState,PLAYER_DRACULA,myTrail);
+		int trailsize = (round <= 6) ? round : TRAIL_SIZE;
 		int i =0;
 		int bestmovescore=-2;
 		int currentmovescore=0;
@@ -76,7 +78,7 @@ void decideDraculaMove(DracView gameState){
 				currentmovescore+=DEGREE_1_IMPOS;
 			}
 			//printf("still looping\n");
-			if (comparelocationarrays(options[i],myTrail,TRAIL_SIZE)==1){
+			if (comparelocationarrays(options[i],myTrail,trailsize)==1){
 				currentmovescore=-1;
 			}
 			printf("prior to if\n");

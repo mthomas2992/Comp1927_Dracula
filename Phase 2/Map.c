@@ -249,6 +249,9 @@ LocationID shortestPath (Map g, LocationID start, LocationID end, Round round, P
 			if (rail_locs[i] == end){
 				if (tempstart==start) {
 //					printf("Towns adjacent rail, moving to %s\n", idToName(end));
+					free (checked);
+					free (rail_locs);
+					disposeQueue(checklist);
 					return end;
 				}
 				done=1;
@@ -267,6 +270,9 @@ LocationID shortestPath (Map g, LocationID start, LocationID end, Round round, P
 //				printf("Yes! Directly connected to %s\n", idToName(start));
 				if (tempstart==start) {
 //					printf("Towns adjacent, moving to %s\n", idToName(end));
+					free (checked);
+					free (rail_locs);
+					disposeQueue(checklist);
 					return end;
 				}
 				done=1;
@@ -280,7 +286,7 @@ LocationID shortestPath (Map g, LocationID start, LocationID end, Round round, P
 		}
 	if (done) break;
 	n=0;
-	for (i=0; i<=71; i++ ) rail_locs[i] = -1;
+	for (i=0; i<71; i++ ) rail_locs[i] = -1;
 //	printf("Not in %s, moving on\n", idToName(start));
 	}
 //	printf("Move List\n%s\n%s\n", idToName(end), idToName(tempstart));
@@ -290,8 +296,9 @@ LocationID shortestPath (Map g, LocationID start, LocationID end, Round round, P
 		tempstart = checked[tempstart];
 	}
 //	printf("First Move is %s\n", idToName(tempstart));
-   free(checked);
-   free(rail_locs);
+	free(checked);
+	free(rail_locs);
+	disposeQueue(checklist);
 	return tempstart;
 }
 

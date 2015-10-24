@@ -48,6 +48,7 @@ void decideHunterMove(HunterView gameState)
 
 	if (where == -1) {
 		registerBestPlay(LocationMatrix[who][0], "I am here, click me!"); 
+		disposeMap(europe);
 		return;
 	}
 
@@ -72,6 +73,7 @@ void decideHunterMove(HunterView gameState)
 		place = LocationMatrix[who][i];
 		registerBestPlay(place, "he'll never hear me comin'");
 	}
+	disposeMap(europe);
 }
 
     //Temporary random location code
