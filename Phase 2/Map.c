@@ -201,8 +201,8 @@ int railConnections(Map g, LocationID start, int maxstep, LocationID locs[], int
          }
          recentlyAdded=0;
      }
-
-
+    disposeStack(checklist);
+    free(checked);
     return maxstep;
 }
 
@@ -290,6 +290,8 @@ LocationID shortestPath (Map g, LocationID start, LocationID end, Round round, P
 		tempstart = checked[tempstart];
 	}
 //	printf("First Move is %s\n", idToName(tempstart));
+   free(checked);
+   free(rail_locs);
 	return tempstart;
 }
 

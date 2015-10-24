@@ -26,9 +26,9 @@
 #include "Game.h"
 #include "DracView.h"
 
-//#define DEGREE_1_IMPOS 10
+#define DEGREE_1_IMPOS 10
 
-/*int comparelocationarrays(int ID,LocationID array[], int arraysize){
+int comparelocationarrays(int ID,LocationID array[], int arraysize){
 	printf("compare called\n");
 	int index=0;
 	for (index=0;index<arraysize-1;index++){
@@ -38,13 +38,13 @@
 		//printf("LocationID[%d]==%d",index,LocationID[index]);
 	}
 	return 0;
-}*/
+}
 
 void decideDraculaMove(DracView gameState){
 	printf("called\n");
 	//printf("DSJDSADNSADNAUNIUNEIUFNEIUFNSIUFNSDIFUNDSUIFNSIDFUNDSIFUNS\n\n\n\n\n\n\n");
 	if (giveMeTheRound(gameState)>0){
-		/*int optionssisze=0;
+		int optionssisze=0;
 		LocationID *options = whereCanIgo(gameState,&optionssisze,1,1); //find all possible moves
 
 		LocationID *PossiblesID0;
@@ -64,7 +64,7 @@ void decideDraculaMove(DracView gameState){
 		LocationID myTrail[TRAIL_SIZE];
 		giveMeTheTrail(gameState,PLAYER_DRACULA,myTrail);
 		int i =0;
-		int bestmovescore=0;
+		int bestmovescore=-2;
 		int currentmovescore=0;
 		char *BestPlay;
 		for(i=0;i<optionssisze;i++){
@@ -79,15 +79,23 @@ void decideDraculaMove(DracView gameState){
 			if (comparelocationarrays(options[i],myTrail,TRAIL_SIZE)==1){
 				currentmovescore=-1;
 			}
+			printf("prior to if\n");
 			if (currentmovescore>bestmovescore&&strcmp(idToAbbrev(options[i]),"JM")!=0){
+				printf("options selected is %d\n",options[i]);
 				BestPlay=idToAbbrev(options[i]);
 				bestmovescore=currentmovescore;
 			}
 			currentmovescore=0;
 		}
-		registerBestPlay(BestPlay,"MATT IS AMAZING");*/
+		registerBestPlay(BestPlay,"MATT IS AMAZING");
+		free(PossiblesID0);
+		free(PossiblesID1);
+		free(PossiblesID2);
+		free(PossiblesID3);
+		free(options);
+		//free(myTrail);
 		//registerBestPlay(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)+1),"Moving up");
-		if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"FR")==0){
+		/*if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"FR")==0){
 			registerBestPlay("CO","Tots not in cologne");
 		} else if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"CO")==0){
 			registerBestPlay("BU","Not in Brussels at all");
@@ -107,7 +115,7 @@ void decideDraculaMove(DracView gameState){
 			registerBestPlay("LI","flipping again");
 		} else if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"LI")==0){
 			registerBestPlay("FR","flipping again");
-		}
+		}*/
 	} else if (giveMeTheRound(gameState)==0) {
 		registerBestPlay("FR","FirstMove");
 	}

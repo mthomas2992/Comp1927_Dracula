@@ -13,7 +13,7 @@ typedef struct Node {
         int val;
 	Link  next;
 } Node;
-	
+
 typedef struct StackRep {
 	Link  top;
 } StackRep;
@@ -49,9 +49,10 @@ void disposeStack(Stack s)
 	Link next, curr = s->top;
 	while (curr != NULL) {
 		next = curr->next;
-		disposeNode(curr);	
+		disposeNode(curr);
 		curr = next;
 	}
+   free(s);
 }
 
 // pushOnto(Stack,Str)
@@ -117,4 +118,3 @@ static void disposeNode(Link curr)
 	assert(curr != NULL);
 	free(curr);
 }
-
