@@ -29,9 +29,9 @@
 #define DEGREE_1_IMPOS 10
 
 int comparelocationarrays(int ID,LocationID array[], int arraysize){
-	printf("compare called\n");
+	//printf("compare called\n");
 	int index=0;
-	for (index=0;index<arraysize-1;index++){
+	for (index=0;index<arraysize;index++){
 		if (array[index]==ID){
 			return 1; //found
 		}
@@ -62,7 +62,7 @@ void decideDraculaMove(DracView gameState){
 		PossiblesID2=whereCanTheyGo(gameState,&PossiblesID2Size,2,1,1,1);
 		PossiblesID3=whereCanTheyGo(gameState,&PossiblesID3Size,3,1,1,1);
 
-		LocationID myTrail[TRAIL_SIZE];
+		LocationID *myTrail=malloc(sizeof(int)*TRAIL_SIZE);
 		giveMeTheTrail(gameState,PLAYER_DRACULA,myTrail);
 		int trailsize = (round <= 6) ? round : TRAIL_SIZE;
 		int i =0;
@@ -79,11 +79,12 @@ void decideDraculaMove(DracView gameState){
 			}
 			//printf("still looping\n");
 			if (comparelocationarrays(options[i],myTrail,trailsize)==1){
+				//printf("comparing trails\n");
 				currentmovescore=-1;
 			}
-			printf("prior to if\n");
+			//printf("prior to if\n");
 			if (currentmovescore>bestmovescore&&strcmp(idToAbbrev(options[i]),"JM")!=0){
-				printf("options selected is %d\n",options[i]);
+				//printf("options selected is %d\n",options[i]);
 				BestPlay=idToAbbrev(options[i]);
 				bestmovescore=currentmovescore;
 			}
@@ -95,6 +96,7 @@ void decideDraculaMove(DracView gameState){
 		free(PossiblesID2);
 		free(PossiblesID3);
 		free(options);
+		free(myTrail);
 		//free(myTrail);
 		//registerBestPlay(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)+1),"Moving up");
 		/*if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"FR")==0){
