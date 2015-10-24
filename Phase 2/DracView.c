@@ -85,7 +85,7 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
          // handle Dracula placing traps/vampires, traps expiring and vampires maturing
          if (pastplays[i+5] == 'M'){
             for (k=1; k!= dracView->trapNum; k++) { //changed this to greater then 6
-              if (k<6){
+              if (k<6){ //forcing update
                 dracView->trapLocs[k-1] = dracView->trapLocs[k];
              } else {
                 break;

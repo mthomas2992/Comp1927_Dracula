@@ -41,7 +41,7 @@ int comparelocationarrays(int ID,LocationID array[], int arraysize){
 }
 
 void decideDraculaMove(DracView gameState){
-	printf("called\n");
+	printf("called\n"); //forcing update
 	//printf("DSJDSADNSADNAUNIUNEIUFNEIUFNSIUFNSDIFUNDSUIFNSIDFUNDSIFUNS\n\n\n\n\n\n\n");
 	int round = giveMeTheRound(gameState);
 	if (round>0){
