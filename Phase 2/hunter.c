@@ -45,7 +45,10 @@ void decideHunterMove(HunterView gameState)
 			registerBestPlay(idToAbbrev(where), "Heal me!, Quickly!");
 			return;
 		}
+	} else if (howHealthyIs(gameState, who) <= 2) {
+			registerBestPlay(idToAbbrev(where), "Heal me! Quickly!");
 	}
+
 
 //----------------------------------------- RESPONSE TO DRACULA --------------------------------------------
 	
@@ -68,6 +71,14 @@ void decideHunterMove(HunterView gameState)
 			disposeMap(europe);
 			return;
 		}
+		// we know where Drac was LAST turn, GO THERE!
+		place = idToAbbrev(shortestPath(europe, where, trail[0], round, who));
+		if (abbrevToID(place) == trail[0]) {
+			registerBestPlay(place, "Target in my sights");
+			disposeMap(europe);
+			return;
+		}
+
 		// we know where Drac was LAST turn. go to the closest connecting city as quick as possible
 		whitelist = whereCanTheyGo(gameState, &wsize, 4, 1,0,0);
 		int distances[wsize];
@@ -78,15 +89,18 @@ void decideHunterMove(HunterView gameState)
 			if (distances[i] < min) {
 				dest_id = whitelist[i];
 				min = distances[i];
-			}
-		}
+			}	
+		} 
 		place = idToAbbrev(shortestPath(europe,where,dest_id,round,who));
-		registerBestPlay(place, "Target in my sights");
+		registerBestPlay(place, "Getting closer");
 		disposeMap(europe);
 		return;
 	}
+	if (trail[0] == HIDE && trail[1] < NUM_MAP_LOCATIONS && trail[1] >= 0) {
+		registerBestPlay(idToAbbrev(shortestPath(europe, where, trail[1], round, who)), "Can't Hide from us!");
+	}
 	int trailsize = (round <= 6) ? round : TRAIL_SIZE;
-	for (i=0; i<trailsize; i++) {
+	for (i=1; i<trailsize; i++) {
 		if (trail[i] < NUM_MAP_LOCATIONS && trail[0] >= 0) {
 			// we know where drac was, go to any place we don't know he has been
 			// search for vamps: find out who is closest, if we are, then go! otherwise do something else
@@ -156,4 +170,3 @@ void decideHunterMove(HunterView gameState)
       registerBestPlay(BestPlay,"I'm on holiday in Geneva, jk");
    }
 }*/
-
