@@ -27,6 +27,8 @@
 #include "DracView.h"
 
 #define DEGREE_1_IMPOS 10
+#define SEA_HEALTHY 0
+#define SEA_PENALTY 0
 
 int comparelocationarrays(int ID,LocationID array[], int arraysize){
 	//printf("compare called\n");
@@ -66,7 +68,7 @@ void decideDraculaMove(DracView gameState){
 		giveMeTheTrail(gameState,PLAYER_DRACULA,myTrail);
 		int trailsize = (round <= 6) ? round : TRAIL_SIZE;
 		int i =0;
-		int bestmovescore=-2;
+		int bestmovescore=-3;
 		int currentmovescore=0;
 		char *BestPlay;
 		for(i=0;i<optionssisze;i++){
@@ -80,17 +82,45 @@ void decideDraculaMove(DracView gameState){
 			//printf("still looping\n");
 			if (comparelocationarrays(options[i],myTrail,trailsize)==1){
 				//printf("comparing trails\n");
-				currentmovescore=-1;
+				currentmovescore=-2;
 			}
+
+			/*if (options[i]==whereIs(gameState,PLAYER_DRACULA)){
+				currentmovescore=-2;
+			}*/
+
+			//TO BE added
+
+			//Add amount regarding howmanymoves it takes to get to the proposed
+			//make it an average of distances or a collect with max?
+
+			if (idToType(options[i])==LAND){
+				currentmovescore+=1;
+			}
+			//check for seas and modify accordingly
+			if (idToType(options[i])==SEA&&howHealthyIs(gameState,PLAYER_DRACULA)>=25){
+				//if we have the health hide please
+				currentmovescore+=SEA_HEALTHY;
+			} else if (idToType(options[i])==SEA&&howHealthyIs(gameState,PLAYER_DRACULA)<25){
+				currentmovescore+=SEA_PENALTY;
+			} else if (idToType(options[i])==SEA&&howHealthyIs(gameState,PLAYER_DRACULA)<5){
+				//no suicides please
+				currentmovescore=-2;
+			}
+
 			//printf("prior to if\n");
 			if (currentmovescore>bestmovescore&&strcmp(idToAbbrev(options[i]),"JM")!=0){
 				//printf("options selected is %d\n",options[i]);
 				BestPlay=idToAbbrev(options[i]);
 				bestmovescore=currentmovescore;
+				printf("best play is %s\n",BestPlay);
+				registerBestPlay(BestPlay,"MATT IS AMAZING");
 			}
 			currentmovescore=0;
 		}
-		registerBestPlay(BestPlay,"MATT IS AMAZING");
+		if (bestmovescore==-2){
+			registerBestPlay("TP","SH*T HELP ME");
+		}
 		free(PossiblesID0);
 		free(PossiblesID1);
 		free(PossiblesID2);

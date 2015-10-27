@@ -28,9 +28,7 @@ struct gameView {
 GameView newGameView(char *pastPlays, PlayerMessage messages[])
 {
   printf("called newGameView\n");
-  printf("checking\n");
    GameView gameView = malloc(sizeof(struct gameView));
-   printf("after malloc which wouldn't make sense\n");
    // INITIALIZE ALL THE THINGS IN THE GAMEVIEW STRUCT
    gameView->RoundNum = 0;
    gameView->CurrentPlayer = 0;
@@ -164,7 +162,7 @@ void getHistory(GameView currentView, PlayerID player,
      printf("called getHistory in gameview\n");
       int i;
 	  int size = TRAIL_SIZE;
-	  if (currentView->RoundNum < TRAIL_SIZE) size = currentView->RoundNum; 
+	  if (currentView->RoundNum < TRAIL_SIZE) size = currentView->RoundNum;
       for (i=0; i<size; i++){
          if (player == 0) trail[i] = getPlayerHistory(currentView->Lord_Godalming, i);
          else if (player == 1) trail[i] = getPlayerHistory(currentView->Dr_Seward, i);
