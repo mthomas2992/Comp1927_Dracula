@@ -79,15 +79,6 @@ void decideDraculaMove(DracView gameState){
 					comparelocationarrays(options[i],PossiblesID3,PossiblesID3Size)==0){
 				currentmovescore+=DEGREE_1_IMPOS;
 			}
-			//printf("still looping\n");
-			if (comparelocationarrays(options[i],myTrail,trailsize)==1){
-				//printf("comparing trails\n");
-				currentmovescore=-2;
-			}
-
-			/*if (options[i]==whereIs(gameState,PLAYER_DRACULA)){
-				currentmovescore=-2;
-			}*/
 
 			//TO BE added
 
@@ -104,13 +95,17 @@ void decideDraculaMove(DracView gameState){
 			} else if (idToType(options[i])==SEA&&howHealthyIs(gameState,PLAYER_DRACULA)<25){
 				currentmovescore+=SEA_PENALTY;
 			} else if (idToType(options[i])==SEA&&howHealthyIs(gameState,PLAYER_DRACULA)<5){
-				//no suicides please
 				currentmovescore=-2;
 			}
 
-			//printf("prior to if\n");
+			if (comparelocationarrays(options[i],myTrail,trailsize)==1){
+				currentmovescore=-2;
+			}
+			if (options[i]==whereIs(gameState,PLAYER_DRACULA)){
+				currentmovescore=-2;
+			}
+
 			if (currentmovescore>bestmovescore&&strcmp(idToAbbrev(options[i]),"JM")!=0){
-				//printf("options selected is %d\n",options[i]);
 				BestPlay=idToAbbrev(options[i]);
 				bestmovescore=currentmovescore;
 				printf("best play is %s\n",BestPlay);
@@ -118,7 +113,7 @@ void decideDraculaMove(DracView gameState){
 			}
 			currentmovescore=0;
 		}
-		if (bestmovescore==-2){
+		if (bestmovescore==-2||bestmovescore==-3){
 			registerBestPlay("TP","SH*T HELP ME");
 		}
 		free(PossiblesID0);
