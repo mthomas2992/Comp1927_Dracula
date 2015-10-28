@@ -134,5 +134,7 @@ LocationID *whereCanTheyGo(DracView currentView, int *numLocations,
 
 //Own functions added
 Map DraculaReturnMap(DracView currentView);
+int havedoubled(DracView currentView);
+int haveHide(DracView currentView);
 
 #endif

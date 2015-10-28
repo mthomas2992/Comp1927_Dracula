@@ -36,25 +36,11 @@
 #define DISTANCE_CAP 8
 
 int comparelocationarrays(int ID,LocationID array[], int arraysize){
-	//printf("compare called\n");
 	int index=0;
 	for (index=0;index<arraysize;index++){
 		if (array[index]==ID){
 			return 1; //found
 		}
-		//printf("LocationID[%d]==%d",index,LocationID[index]);
-	}
-	return 0;
-}
-
-int checktrail(int ID,LocationID array[], int arraysize){
-	int index=0;
-	int found=0;
-	for (index=0;index<arraysize;index++){
-		if (array[index]==ID){
-			found++;
-		}
-		if (found>=2) return 1;
 	}
 	return 0;
 }
@@ -69,48 +55,29 @@ int findtrailref(int ID,LocationID array[], int arraysize){
 	return 0;
 }
 
-int checkforhides(LocationID array[], int arraysize){
-	int index=1;
-	for (index=1;index<arraysize;index++){
-		if (array[index]==array[index-1]){
-			return 1;
-		}
-	}
-	return 0;
-}
-
 void decideDraculaMove(DracView gameState){
 	printf("called\n"); //forcing update
 	int round = giveMeTheRound(gameState);
 	if (round>0){
 		int optionssisze=0;
+		printf("I think I am at %s\n",idToAbbrev(whereIs(gameState,PLAYER_DRACULA)));
 		LocationID *options = whereCanIgo(gameState,&optionssisze,1,1); //find all possible moves
-		if (whereIs(gameState,PLAYER_DRACULA)==ROME){
-			optionssisze--;
-		}
-		//add the hide option
-		//options[optionssisze]=whereIs(gameState,PLAYER_DRACULA);
 		printf("all possible locations are:\n");
 		int test=0;
 		while(test<optionssisze){
 			printf("options[%d] %s\n",test,idToAbbrev(options[test]));
 			test++;
 		}
-		printf("optionssisze is %d",optionssisze);
+		printf("optionssisze is %d\n",optionssisze);
 		LocationID *myTrail=malloc(sizeof(int)*TRAIL_SIZE);
 		giveMeTheTrail(gameState,PLAYER_DRACULA,myTrail);
 		int trailsize = (round <= 6) ? round : TRAIL_SIZE;
-		//determine if double back has occured
-		int DoubleBackInTrail=FALSE;
+		//determine if hide or double back has occurred
+		int HideInTrail=haveHide(gameState);
+		int DoubleBackInTrail=havedoubled(gameState);
+		printf("think I am hided? %d\n",HideInTrail);
+		printf("think I am doubled? %d\n\n",DoubleBackInTrail);
 		int i=0;
-		/*for (i=DOUBLE_BACK_1;i<=DOUBLE_BACK_5;i++){
-			if (comparelocationarrays(i,myTrail,trailsize)==1) DoubleBackInTrail=TRUE;
-		}*/
-		while(i<trailsize){
-			if (checktrail(myTrail[i],myTrail,trailsize)==1) DoubleBackInTrail=TRUE;
-			i++;
-		}
-		i=0;
 		//here best move is set to initial, which is larger then what an illegal move
 		//can recieve as a score, so if only illegal moves are availible TP will occur
 		int bestmovescore=INITIAL;
@@ -163,11 +130,15 @@ void decideDraculaMove(DracView gameState){
 			if (options[i]!=whereIs(gameState,PLAYER_DRACULA)){
 				moveintrail=comparelocationarrays(options[i],myTrail,trailsize);
 			} else {
-				if (checkforhides(myTrail,trailsize)==1){
+				if (HideInTrail&&DoubleBackInTrail){
 					printf("\n**Illegal hide move detected**\n");
 					currentmovescore=ILLEGAL_MOVE;
-				} else {
+				} else if (HideInTrail==0){
 					isHide=1;
+				} else if (DoubleBackInTrail==0){
+					printf("\n**Potential 1 step doubleback detected\n");
+					doublebackrequired=1;
+					currentmovescore-=6;
 				}
 			}
 			if (DoubleBackInTrail&&moveintrail){
@@ -186,7 +157,11 @@ void decideDraculaMove(DracView gameState){
 					BestPlay=idToAbbrev(HIDE);
 					bestmovescore=currentmovescore;
 				} else if (doublebackrequired==1) {
-					BestPlay=idToAbbrev(DOUBLE_BACK_1+findtrailref(options[i],myTrail,trailsize));
+					if ((DOUBLE_BACK_1+findtrailref(options[i],myTrail,trailsize))>=TELEPORT){
+						BestPlay=idToAbbrev(options[i]);
+					} else {
+						BestPlay=idToAbbrev(DOUBLE_BACK_1+findtrailref(options[i],myTrail,trailsize));
+					}
 					bestmovescore=currentmovescore;
 				} else {
 					BestPlay=idToAbbrev(options[i]);
@@ -206,6 +181,6 @@ void decideDraculaMove(DracView gameState){
 		free(options);
 		free(myTrail);
 	} else if (giveMeTheRound(gameState)==0) {
-		registerBestPlay("FR","FirstMove");
+		registerBestPlay("BR","FirstMove");
 	}
 }

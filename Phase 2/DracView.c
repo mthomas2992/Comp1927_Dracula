@@ -17,6 +17,8 @@ struct dracView {
    LocationID trapLocs[6];
    int trapNum;
 
+   int Trail2[TRAIL_SIZE];
+
    GameView gameView;
 };
 
@@ -24,17 +26,24 @@ struct dracView {
 // Creates a new DracView to summarise the current state of the game
 DracView newDracView(char *pastPlays, PlayerMessage messages[])
 {
-  //printf("called newDracView\n");
+  printf("called newDracView\n");
    DracView dracView = malloc(sizeof(struct dracView));
    char *pastplays = malloc(LONGEST_GAME);
    strcpy(pastplays, pastPlays);
    dracView->vampLoc = -1;
    dracView->trapNum = 0;
    dracView->trapLocs[0] = -1;
+   //initialise the second trail
+   int xx=0;
+   while (xx<TRAIL_SIZE){
+      dracView->Trail2[xx]=0;
+      xx++;
+   }
    int i,j,k,found;
 
    //parse the pastPlays String to edit any Dracula Location and update trap/vamp locs
    for (i=0; pastPlays[i] != '\0'; i+=7) {
+      //printf("looping\n");
       if (i>LONGEST_GAME){
          printf("Longest\n");
          break;
@@ -59,28 +68,41 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
             j++;
          }
       }
-      else if (pastPlays[i] == 'D') {
+      else if (pastPlays[i] == 'D') { //chacnged these
+         int ii=5;
+         for (ii=5; ii>0; ii--) { //shift the array back
+            dracView->Trail2[ii] =dracView->Trail2[ii-1];
+         }
          if (abbrevToID(&(pastplays[i+1])) == HIDE) {
             pastplays[i+1] = pastplays[i+1-CHARACTERS_IN_ROUND];
             pastplays[i+2] = pastplays[i+2-CHARACTERS_IN_ROUND];
+            dracView->Trail2[0]=1;
          } else if (abbrevToID(&(pastplays[i+1])) == DOUBLE_BACK_1) {
+            pastplays[i+1] = pastplays[i+1-1*CHARACTERS_IN_ROUND];
+            pastplays[i+2] = pastplays[i+2-1*CHARACTERS_IN_ROUND];
+            dracView->Trail2[0]=2;
+         } else if (abbrevToID(&(pastplays[i+1])) == DOUBLE_BACK_2) {
             pastplays[i+1] = pastplays[i+1-2*CHARACTERS_IN_ROUND];
             pastplays[i+2] = pastplays[i+2-2*CHARACTERS_IN_ROUND];
-         } else if (abbrevToID(&(pastplays[i+1])) == DOUBLE_BACK_2) {
+            dracView->Trail2[0]=2;
+         } else if (abbrevToID(&(pastplays[i+1])) == DOUBLE_BACK_3) {
             pastplays[i+1] = pastplays[i+1-3*CHARACTERS_IN_ROUND];
             pastplays[i+2] = pastplays[i+2-3*CHARACTERS_IN_ROUND];
-         } else if (abbrevToID(&(pastplays[i+1])) == DOUBLE_BACK_3) {
+            dracView->Trail2[0]=2;
+         } else if (abbrevToID(&(pastplays[i+1])) == DOUBLE_BACK_4) {
             pastplays[i+1] = pastplays[i+1-4*CHARACTERS_IN_ROUND];
             pastplays[i+2] = pastplays[i+2-4*CHARACTERS_IN_ROUND];
-         } else if (abbrevToID(&(pastplays[i+1])) == DOUBLE_BACK_4) {
+            dracView->Trail2[0]=2;
+         } else if (abbrevToID(&(pastplays[i+1])) == DOUBLE_BACK_5) {
             pastplays[i+1] = pastplays[i+1-5*CHARACTERS_IN_ROUND];
             pastplays[i+2] = pastplays[i+2-5*CHARACTERS_IN_ROUND];
-         } else if (abbrevToID(&(pastplays[i+1])) == DOUBLE_BACK_5) {
-            pastplays[i+1] = pastplays[i+1-6*CHARACTERS_IN_ROUND];
-            pastplays[i+2] = pastplays[i+2-6*CHARACTERS_IN_ROUND];
+            dracView->Trail2[0]=2;
          } else if (abbrevToID(&(pastplays[i+1])) == TELEPORT) {
             pastplays[i+1] = 'C';
             pastplays[i+2] = 'D';
+            dracView->Trail2[0]=0;
+         } else {
+            dracView->Trail2[0]=0;
          }
          // handle Dracula placing traps/vampires, traps expiring and vampires maturing
          if (pastplays[i+5] == 'M'){
@@ -107,6 +129,12 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
    }
    dracView->gameView = newGameView(pastplays, messages);
    free(pastplays);
+   printf("contents of 2nd trail\n");
+   xx=0;
+   while (xx<TRAIL_SIZE){
+      printf("[%d] is %d\n",xx,dracView->Trail2[xx]);
+      xx++;
+   }
    return dracView;
 }
 
@@ -209,4 +237,26 @@ LocationID *whereCanTheyGo(DracView currentView, int *numLocations,
 
 Map DraculaReturnMap(DracView currentView){
    return ReturnMap(currentView->gameView);
+}
+
+int havedoubled(DracView currentView){
+   printf("doubled\n");
+   int index=0;
+	for (index=0;index<TRAIL_SIZE;index++){
+		if (currentView->Trail2[index]==2){
+			return 1; //found
+		}
+	}
+	return 0;
+}
+
+int haveHide(DracView currentView){
+   printf("hided\n");
+   int index=0;
+   for (index=0;index<TRAIL_SIZE;index++){
+      if (currentView->Trail2[index]==1){
+         return 1; //found
+      }
+   }
+   return 0;
 }
