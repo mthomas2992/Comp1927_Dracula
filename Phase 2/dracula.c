@@ -78,6 +78,7 @@ void decideDraculaMove(DracView gameState){
 		printf("think I am hided? %d\n",HideInTrail);
 		printf("think I am doubled? %d\n\n",DoubleBackInTrail);
 		int i=0;
+		if (idToType(whereIs(gameState,PLAYER_DRACULA))==SEA) HideInTrail=1;
 		//here best move is set to initial, which is larger then what an illegal move
 		//can recieve as a score, so if only illegal moves are availible TP will occur
 		int bestmovescore=INITIAL;
