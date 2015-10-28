@@ -138,7 +138,7 @@ void decideDraculaMove(DracView gameState){
 				} else if (DoubleBackInTrail==0){
 					printf("\n**Potential 1 step doubleback detected\n");
 					doublebackrequired=1;
-					currentmovescore-=6;
+					currentmovescore-=3;
 				}
 			}
 			if (DoubleBackInTrail&&moveintrail){
@@ -146,7 +146,7 @@ void decideDraculaMove(DracView gameState){
 				currentmovescore=ILLEGAL_MOVE;
 			} else if (moveintrail&&(DoubleBackInTrail==0)){
 				printf("\n**Potential double back detected**\n");
-				currentmovescore-=6;
+				currentmovescore-=3;
 				doublebackrequired=1;
 				if (currentmovescore<AVOID_MOVE) currentmovescore=AVOID_MOVE;
 			}
@@ -181,6 +181,6 @@ void decideDraculaMove(DracView gameState){
 		free(options);
 		free(myTrail);
 	} else if (giveMeTheRound(gameState)==0) {
-		registerBestPlay("BR","FirstMove");
+		registerBestPlay("FR","FirstMove");
 	}
 }
