@@ -9,6 +9,7 @@
 #include "Game.h"
 #include "Places.h"
 #include "GameView.h"
+#include "Map.h"
 
 typedef struct dracView *DracView;
 
@@ -130,5 +131,8 @@ LocationID *whereCanIgo(DracView currentView, int *numLocations, int road, int s
 
 LocationID *whereCanTheyGo(DracView currentView, int *numLocations,
                            PlayerID player, int road, int rail, int sea);
+
+//Own functions added
+Map DraculaReturnMap(DracView currentView);
 
 #endif

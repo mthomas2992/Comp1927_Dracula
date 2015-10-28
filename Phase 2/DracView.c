@@ -24,7 +24,7 @@ struct dracView {
 // Creates a new DracView to summarise the current state of the game
 DracView newDracView(char *pastPlays, PlayerMessage messages[])
 {
-  printf("called newDracView\n");
+  //printf("called newDracView\n");
    DracView dracView = malloc(sizeof(struct dracView));
    char *pastplays = malloc(LONGEST_GAME);
    strcpy(pastplays, pastPlays);
@@ -94,7 +94,8 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
             dracView->trapNum--;
          }
          if (pastplays[i+3] == 'T') {
-            dracView->trapLocs[dracView->trapNum++] = abbrevToID(&(pastplays[i+1]));
+            //commented out due to temp issues
+            //dracView->trapLocs[dracView->trapNum++] = abbrevToID(&(pastplays[i+1]));
          }
          if (pastplays[i+4] == 'V') {
             dracView->vampLoc = abbrevToID(&(pastplays[i+1]));
@@ -113,7 +114,7 @@ DracView newDracView(char *pastPlays, PlayerMessage messages[])
 // Frees all memory previously allocated for the DracView toBeDeleted
 void disposeDracView(DracView toBeDeleted)
 {
-  printf("called disposeDracView\n");
+  //printf("called disposeDracView\n");
    disposeGameView( toBeDeleted->gameView );
    free(toBeDeleted);
 }
@@ -124,28 +125,28 @@ void disposeDracView(DracView toBeDeleted)
 // Get the current round
 Round giveMeTheRound(DracView currentView)
 {
-  printf("Called giveMeTheRound in dracview\n");
+  //printf("Called giveMeTheRound in dracview\n");
    return getRound( currentView->gameView );
 }
 
 // Get the current score
 int giveMeTheScore(DracView currentView)
 {
-  printf("called giveMeTheScore in dracview\n");
+  //printf("called giveMeTheScore in dracview\n");
    return getScore( currentView->gameView);
 }
 
 // Get the current health points for a given player
 int howHealthyIs(DracView currentView, PlayerID player)
 {
-  printf("called howHealthyIs in dracview\n");
+  //printf("called howHealthyIs in dracview\n");
    return getHealth( currentView->gameView, player);
 }
 
 // Get the current location id of a given player
 LocationID whereIs(DracView currentView, PlayerID player)
 {
-  printf("called whereIs in dracview\n");
+  //printf("called whereIs in dracview\n");
    return getLocation( currentView->gameView, player);
 }
 
@@ -153,7 +154,7 @@ LocationID whereIs(DracView currentView, PlayerID player)
 void lastMove(DracView currentView, PlayerID player,
    LocationID *start, LocationID *end)
 {
-  printf("called lastMove in dracview\n");
+  //printf("called lastMove in dracview\n");
    LocationID trail[6] ={};
    getHistory(currentView->gameView, player, trail);
    *start = trail[1];
@@ -165,7 +166,7 @@ void lastMove(DracView currentView, PlayerID player,
 void whatsThere(DracView currentView, LocationID where,
    int *numTraps, int *numVamps)
 {
-  printf("called whatsThere in dracview\n");
+  //printf("called whatsThere in dracview\n");
    int i;
    int Vamps=0, Traps=0;
    if (currentView->vampLoc == where) Vamps++;
@@ -185,7 +186,7 @@ void whatsThere(DracView currentView, LocationID where,
 void giveMeTheTrail(DracView currentView, PlayerID player,
    LocationID trail[TRAIL_SIZE])
 {
-  printf("called giveMeTheTrail in dracview\n");
+  //printf("called giveMeTheTrail in dracview\n");
    getHistory(currentView->gameView, player, trail);
 }
 
@@ -204,4 +205,8 @@ LocationID *whereCanTheyGo(DracView currentView, int *numLocations,
 {
    return connectedLocations(currentView->gameView, numLocations,
       whereIs(currentView, player), player, giveMeTheRound(currentView), road, rail, sea);
+}
+
+Map DraculaReturnMap(DracView currentView){
+   return ReturnMap(currentView->gameView);
 }

@@ -25,10 +25,15 @@
 #include <string.h>
 #include "Game.h"
 #include "DracView.h"
+#include "Map.h"
 
-#define DEGREE_1_IMPOS 10
-#define SEA_HEALTHY 0
-#define SEA_PENALTY 0
+#define ILLEGAL_MOVE -2 //must be less then INITIAL & AVOID_MOVE
+#define INITIAL -1 //must be less then avoid move
+#define AVOID_MOVE 0 //must be less then BAD_MOVE
+#define BAD_MOVE 1
+
+#define DANGERZONE -6
+#define DISTANCE_CAP 8
 
 int comparelocationarrays(int ID,LocationID array[], int arraysize){
 	//printf("compare called\n");
@@ -42,134 +47,165 @@ int comparelocationarrays(int ID,LocationID array[], int arraysize){
 	return 0;
 }
 
+int checktrail(int ID,LocationID array[], int arraysize){
+	int index=0;
+	int found=0;
+	for (index=0;index<arraysize;index++){
+		if (array[index]==ID){
+			found++;
+		}
+		if (found>=2) return 1;
+	}
+	return 0;
+}
+
+int findtrailref(int ID,LocationID array[], int arraysize){
+	int index=0;
+	for (index=0;index<arraysize;index++){
+		if (array[index]==ID){
+			return index;
+		}
+	}
+	return 0;
+}
+
+int checkforhides(LocationID array[], int arraysize){
+	int index=1;
+	for (index=1;index<arraysize;index++){
+		if (array[index]==array[index-1]){
+			return 1;
+		}
+	}
+	return 0;
+}
+
 void decideDraculaMove(DracView gameState){
 	printf("called\n"); //forcing update
-	//printf("DSJDSADNSADNAUNIUNEIUFNEIUFNSIUFNSDIFUNDSUIFNSIDFUNDSIFUNS\n\n\n\n\n\n\n");
 	int round = giveMeTheRound(gameState);
 	if (round>0){
 		int optionssisze=0;
 		LocationID *options = whereCanIgo(gameState,&optionssisze,1,1); //find all possible moves
-
-		LocationID *PossiblesID0;
-		int PossiblesID0Size=0;
-		LocationID *PossiblesID1;
-		int PossiblesID1Size=0;
-		LocationID *PossiblesID2;
-		int PossiblesID2Size=0;
-		LocationID *PossiblesID3;
-		int PossiblesID3Size=0;
-
-		PossiblesID0=whereCanTheyGo(gameState,&PossiblesID0Size,0,1,1,1);
-		PossiblesID1=whereCanTheyGo(gameState,&PossiblesID1Size,1,1,1,1);
-		PossiblesID2=whereCanTheyGo(gameState,&PossiblesID2Size,2,1,1,1);
-		PossiblesID3=whereCanTheyGo(gameState,&PossiblesID3Size,3,1,1,1);
-
+		if (whereIs(gameState,PLAYER_DRACULA)==ROME){
+			optionssisze--;
+		}
+		//add the hide option
+		//options[optionssisze]=whereIs(gameState,PLAYER_DRACULA);
+		printf("all possible locations are:\n");
+		int test=0;
+		while(test<optionssisze){
+			printf("options[%d] %s\n",test,idToAbbrev(options[test]));
+			test++;
+		}
+		printf("optionssisze is %d",optionssisze);
 		LocationID *myTrail=malloc(sizeof(int)*TRAIL_SIZE);
 		giveMeTheTrail(gameState,PLAYER_DRACULA,myTrail);
 		int trailsize = (round <= 6) ? round : TRAIL_SIZE;
-		int i =0;
-		int bestmovescore=-3;
+		//determine if double back has occured
+		int DoubleBackInTrail=FALSE;
+		int i=0;
+		/*for (i=DOUBLE_BACK_1;i<=DOUBLE_BACK_5;i++){
+			if (comparelocationarrays(i,myTrail,trailsize)==1) DoubleBackInTrail=TRUE;
+		}*/
+		while(i<trailsize){
+			if (checktrail(myTrail[i],myTrail,trailsize)==1) DoubleBackInTrail=TRUE;
+			i++;
+		}
+		i=0;
+		//here best move is set to initial, which is larger then what an illegal move
+		//can recieve as a score, so if only illegal moves are availible TP will occur
+		int bestmovescore=INITIAL;
 		int currentmovescore=0;
+		int doublebackrequired=0;
 		char *BestPlay;
+		int bestfound=0;
+		int isHide=0;
 		for(i=0;i<optionssisze;i++){
-			//printf("looping, at id %d\n",options[i]);
-			if (comparelocationarrays(options[i],PossiblesID0,PossiblesID0Size)==0&&
-					comparelocationarrays(options[i],PossiblesID1,PossiblesID1Size)==0&&
-					comparelocationarrays(options[i],PossiblesID2,PossiblesID2Size)==0&&
-					comparelocationarrays(options[i],PossiblesID3,PossiblesID3Size)==0){
-				currentmovescore+=DEGREE_1_IMPOS;
-			}
-
-			//TO BE added
-
-			//Add amount regarding howmanymoves it takes to get to the proposed
-			//make it an average of distances or a collect with max?
-
-			if (idToType(options[i])==LAND){
-				currentmovescore+=1;
-			}
-			//check for seas and modify accordingly
-			if (idToType(options[i])==SEA&&howHealthyIs(gameState,PLAYER_DRACULA)>=25){
-				//if we have the health hide please
-				currentmovescore+=SEA_HEALTHY;
-			} else if (idToType(options[i])==SEA&&howHealthyIs(gameState,PLAYER_DRACULA)<25){
-				currentmovescore+=SEA_PENALTY;
-			} else if (idToType(options[i])==SEA&&howHealthyIs(gameState,PLAYER_DRACULA)<5){
-				currentmovescore=-2;
-			}
-
-			if (comparelocationarrays(options[i],myTrail,trailsize)==1){
-				currentmovescore=-2;
-			}
-			if (options[i]==whereIs(gameState,PLAYER_DRACULA)){
-				currentmovescore=-2;
-			}
-
-			if (currentmovescore>bestmovescore&&strcmp(idToAbbrev(options[i]),"JM")!=0){
-				BestPlay=idToAbbrev(options[i]);
-				bestmovescore=currentmovescore;
-				printf("best play is %s\n",BestPlay);
-				registerBestPlay(BestPlay,"MATT IS AMAZING");
-			}
+			//Score based on distance of each hunter ONLY WHEN LAND
 			currentmovescore=0;
+			doublebackrequired=0;
+			isHide=0;
+			printf("Assesing move %s\n",idToAbbrev(options[i]));
+			printf("My health is %d\n",howHealthyIs(gameState,PLAYER_DRACULA));
+			if (idToType(options[i])==LAND){
+				//score distance
+				printf("Land move\n");
+				int x=0;
+				for (x=0;x<PLAYER_DRACULA;x++){ //iterate through hunters
+					int movedistance=howManyMoves(DraculaReturnMap(gameState),whereIs(gameState,x),options[i],giveMeTheRound(gameState),x);
+					printf("distance from hunter %d is %d\n",x,currentmovescore);
+					if (movedistance>DISTANCE_CAP) movedistance=DISTANCE_CAP; //Cap at 8 to prevent unbalanced
+					if (movedistance==1) currentmovescore+=DANGERZONE; //if moving into immediate danger consider effects
+					else if (movedistance==0) currentmovescore=AVOID_MOVE;
+					else	currentmovescore+=movedistance; //else just add the distance to the score
+					if (currentmovescore<AVOID_MOVE) currentmovescore=AVOID_MOVE; //don't let it go below
+				}
+			} else if (idToType(options[i])==SEA){
+				//determine score to add based on health
+				printf("Sea move\n");
+				int myhealth=howHealthyIs(gameState,PLAYER_DRACULA);
+				if (myhealth>=16){
+					if (myhealth%4==0){ //make sure divisible
+						currentmovescore+=myhealth/4;
+					} else {
+						myhealth-=myhealth%4;
+						currentmovescore+=myhealth/4;
+					}
+				} else if (myhealth>=(LIFE_LOSS_DRACULA_ENCOUNTER+1)){
+					currentmovescore+=1;
+				} else { //avoid suicides please
+					printf("**avoiding suicide**\n");
+					currentmovescore=AVOID_MOVE;
+				}
+			}
+			//================BELOW THIS LINE MUST EXECUTE LAST=================
+			//Check if double back, if double back check if its legal, if not score NULL
+			int moveintrail=0;
+			if (options[i]!=whereIs(gameState,PLAYER_DRACULA)){
+				moveintrail=comparelocationarrays(options[i],myTrail,trailsize);
+			} else {
+				if (checkforhides(myTrail,trailsize)==1){
+					printf("\n**Illegal hide move detected**\n");
+					currentmovescore=ILLEGAL_MOVE;
+				} else {
+					isHide=1;
+				}
+			}
+			if (DoubleBackInTrail&&moveintrail){
+				printf("\n**illegal move detected**\n");
+				currentmovescore=ILLEGAL_MOVE;
+			} else if (moveintrail&&(DoubleBackInTrail==0)){
+				printf("\n**Potential double back detected**\n");
+				currentmovescore-=6;
+				doublebackrequired=1;
+				if (currentmovescore<AVOID_MOVE) currentmovescore=AVOID_MOVE;
+			}
+			printf ("move assessed to be %d\n\n",currentmovescore);
+			//if best score set move
+			if ((currentmovescore>bestmovescore)&&(options[i]!=ST_JOSEPH_AND_ST_MARYS)/*&&(options[i]!=whereIs(gameState,PLAYER_DRACULA))*/){
+				if (isHide==1) {
+					BestPlay=idToAbbrev(HIDE);
+					bestmovescore=currentmovescore;
+				} else if (doublebackrequired==1) {
+					BestPlay=idToAbbrev(DOUBLE_BACK_1+findtrailref(options[i],myTrail,trailsize));
+					bestmovescore=currentmovescore;
+				} else {
+					BestPlay=idToAbbrev(options[i]);
+					bestmovescore=currentmovescore;
+				}
+				bestfound=1;
+				printf("best play is %s\n\n",BestPlay);
+			}
 		}
-		if (bestmovescore==-2||bestmovescore==-3){
-			registerBestPlay("TP","SH*T HELP ME");
+		//After all scoring if best move is null set to TP
+		if (BestPlay==NULL||bestfound==0){
+			registerBestPlay("TP","No choice, well played");
+		} else {
+			registerBestPlay(BestPlay,"Haha I am still winning");
 		}
-		free(PossiblesID0);
-		free(PossiblesID1);
-		free(PossiblesID2);
-		free(PossiblesID3);
+		optionssisze=0;
 		free(options);
 		free(myTrail);
-		//free(myTrail);
-		//registerBestPlay(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)+1),"Moving up");
-		/*if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"FR")==0){
-			registerBestPlay("CO","Tots not in cologne");
-		} else if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"CO")==0){
-			registerBestPlay("BU","Not in Brussels at all");
-		} else if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"BU")==0){
-			registerBestPlay("LE","LE is a horible city");
-		} else if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"LE")==0){
-			registerBestPlay("NA","This city has a weird name");
-		} else if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"NA")==0){
-			registerBestPlay("CF","Lake something");
-		} else if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"CF")==0){
-			registerBestPlay("PA","I couldn't read this city on the map");
-		} else if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"PA")==0){
-			registerBestPlay("ST","Meat");
-		} else if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"ST")==0){
-			registerBestPlay("NU","flipping");
-		} else if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"NU")==0){
-			registerBestPlay("LI","flipping again");
-		} else if (strcmp(idToAbbrev(whereIs(gameState,PLAYER_DRACULA)),"LI")==0){
-			registerBestPlay("FR","flipping again");
-		}*/
 	} else if (giveMeTheRound(gameState)==0) {
 		registerBestPlay("FR","FirstMove");
 	}
-	/*if (giveMeTheRound(gameState)==0){
-		registerBestPlay("FR","Matt is frustrated");
-	} else {
-		LocationID *Possibles;
-		int PossiblesSize=0;
-		Possibles=whereCanIgo(gameState,&PossiblesSize,1,0);
-		LocationID myTrail[TRAIL_SIZE];
-		giveMeTheTrail(gameState,PLAYER_DRACULA,myTrail);
-		int found=0;
-		int x=0;
-		while (found==0){
-			if (x<PossiblesSize){
-				if (comparelocationarrays(Possibles[x],myTrail,TRAIL_SIZE)==0){
-					registerBestPlay(idToAbbrev(Possibles[x]),"EVIL");
-					found=1;
-				} else {
-					x++;
-				}
-			} else {
-				registerBestPlay("CD","FALLBACK EVIL FALLBACK");
-				found=1;
-			}
-		}
-	}*/
 }

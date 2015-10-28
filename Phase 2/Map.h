@@ -3,6 +3,8 @@
 #ifndef MAP_H
 #define MAP_H
 
+typedef struct MapRep *Map;
+
 #include "GameView.h"
 #include "Places.h"
 
@@ -12,13 +14,13 @@ typedef struct edge{
     TransportID type;
 } Edge;
 
-// graph representation is hidden 
-typedef struct MapRep *Map; 
+// graph representation is hidden
 
-// operations on graphs 
-Map  newMap();  
-void disposeMap(Map g); 
-void showMap(Map g); 
+
+// operations on graphs
+Map  newMap();
+void disposeMap(Map g);
+void showMap(Map g);
 int  numV(Map g);
 int  numE(Map g, TransportID t);
 int connections(Map g, LocationID start, LocationID end, int type);
