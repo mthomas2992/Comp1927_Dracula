@@ -128,8 +128,10 @@ void decideDraculaMove(DracView gameState){
 			//================BELOW THIS LINE MUST EXECUTE LAST=================
 			//Check if double back, if double back check if its legal, if not score NULL
 			int moveintrail=0;
+			int moveintrail2=0;
 			if (options[i]!=whereIs(gameState,PLAYER_DRACULA)){
-				moveintrail=comparelocationarrays(options[i],myTrail,trailsize);
+				moveintrail=comparelocationarrays(options[i],myTrail,trailsize-1);
+				moveintrail2=comparelocationarrays(options[i],myTrail,trailsize);
 			} else {
 				if (HideInTrail&&DoubleBackInTrail){
 					printf("\n**Illegal hide move detected**\n");
@@ -145,7 +147,7 @@ void decideDraculaMove(DracView gameState){
 			if (DoubleBackInTrail&&moveintrail){
 				printf("\n**illegal move detected**\n");
 				currentmovescore=ILLEGAL_MOVE;
-			} else if (moveintrail&&(DoubleBackInTrail==0)){
+			} else if (moveintrail2&&(DoubleBackInTrail==0)){
 				printf("\n**Potential double back detected**\n");
 				currentmovescore-=3;
 				doublebackrequired=1;

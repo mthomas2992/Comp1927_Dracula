@@ -242,7 +242,7 @@ Map DraculaReturnMap(DracView currentView){
 int havedoubled(DracView currentView){
    printf("doubled\n");
    int index=0;
-	for (index=0;index<TRAIL_SIZE;index++){
+	for (index=0;index<TRAIL_SIZE-1;index++){
 		if (currentView->Trail2[index]==2){
 			return 1; //found
 		}
@@ -253,7 +253,7 @@ int havedoubled(DracView currentView){
 int haveHide(DracView currentView){
    printf("hided\n");
    int index=0;
-   for (index=0;index<TRAIL_SIZE;index++){
+   for (index=0;index<TRAIL_SIZE-1;index++){
       if (currentView->Trail2[index]==1){
          return 1; //found
       }
